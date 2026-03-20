@@ -76,3 +76,6 @@ instance Show a => Show (SymmetricList a) where
 
 instance Functor SymmetricList where
     fmap f (SL (xs, ys)) = SL ([f x | x <- xs], [f y | y <- ys]) 
+
+instance Foldable SymmetricList where
+    foldr f i (SL (xs, ys)) = foldr f (foldr f i (reverse ys)) xs
