@@ -1,6 +1,6 @@
 module SymmetricList where
 
-import Prelude hiding (head, tail, last, dropWhile)
+import Prelude hiding (head, tail, last, dropWhile, init)
 import qualified Data.List as Lst
 
 {-- 
@@ -79,3 +79,7 @@ instance Functor SymmetricList where
 
 instance Foldable SymmetricList where
     foldr f i (SL (xs, ys)) = foldr f (foldr f i (reverse ys)) xs
+
+instance Applicative SymmetricList where
+    pure x = init [x]
+    (<*>) (SL (fsLeft, fsRight)) (SL (xsLeft, xsRight)) = SL ([ f x | f <- fsLeft, x <- xsLeft], [ f x | f <- fsRight, x <- xsRight]) 
