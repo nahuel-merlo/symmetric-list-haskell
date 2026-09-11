@@ -1,6 +1,5 @@
 module Data.SymmetricList (
     SymmetricList,
-    init,
     fromList,
     toList,
     nil,
@@ -50,17 +49,17 @@ snoc y (SL (xs, ys))
 
 head :: SymmetricList a -> a
 head (SL ([], []))    = error "head on empty symmetric list"
-head (SL ((x:xs), _)) = x
+head (SL ((x:_), _)) = x
 head (SL (_, ys))     = (Lst.head . Lst.reverse) ys
 
 last :: SymmetricList a -> a
 last (SL ([], []))    = error "last on empty symmetric list"
-last (SL (_, (y:ys))) = y
+last (SL (_, (y:_))) = y
 last (SL (xs, _))     = (Lst.head . Lst.reverse) xs
 
 tail :: SymmetricList a -> SymmetricList a
 tail (SL ([], []))  = error "tail on empty symmetric list"
-tail (SL ([], [y])) = nil
+tail (SL ([], [_])) = nil
 tail (SL (xs, ys))
     | (length xs) == 1 = SL (reverse vs, us)
     | otherwise        = SL (Lst.tail xs, ys)
@@ -68,7 +67,7 @@ tail (SL (xs, ys))
         (us, vs) = Lst.splitAt ((Lst.length ys) `div` 2) ys
 
 dropWhile :: (a -> Bool) -> SymmetricList a -> SymmetricList a
-dropWhile p sl@(SL (xs, ys)) 
+dropWhile p sl@(SL (xs, _)) 
     | p $ Lst.head xs = dropWhile p (tail sl)
     | otherwise       = sl
 
@@ -77,8 +76,8 @@ null (SL ([], [])) = True
 null _           = False
 
 single :: SymmetricList a -> Bool
-single (SL ([x], [])) = True
-single (SL ([], [y])) = True
+single (SL ([_], [])) = True
+single (SL ([], [_])) = True
 single _            = False
 
 {-- Instances --}
