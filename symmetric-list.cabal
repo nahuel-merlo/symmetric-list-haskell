@@ -105,4 +105,5 @@ test-suite symmetric-list-test
     -- Test dependencies.
     build-depends:
         base ^>=4.17.2.1,
-        symmetric-list
+        symmetric-list,
+        hspec
