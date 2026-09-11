@@ -1,6 +1,20 @@
-module SymmetricList where
+module Data.SymmetricList (
+    SymmetricList,
+    init,
+    fromList,
+    toList,
+    nil,
+    cons,
+    snoc,
+    head,
+    last,
+    tail,
+    dropWhile,
+    null,
+    single
+) where
 
-import Prelude hiding (head, tail, last, dropWhile, init)
+import Prelude hiding (head, tail, last, dropWhile, init, null)
 import qualified Data.List as Lst
 
 {-- 
@@ -71,8 +85,8 @@ single _            = False
 
 instance Show a => Show (SymmetricList a) where
     -- show (SL l) = show l
-    -- show sl = show $ toList sl 
-    show (SL (xs, ys)) = ("<- ") ++ (show xs) ++ (" | ") ++ (show $ reverse ys) ++ (" ->") 
+    show sl = show $ toList sl 
+    -- show (SL (xs, ys)) = ("<- ") ++ (show xs) ++ (" | ") ++ (show $ reverse ys) ++ (" ->") 
 
 instance Functor SymmetricList where
     fmap f (SL (xs, ys)) = SL ([f x | x <- xs], [f y | y <- ys]) 
