@@ -44,3 +44,16 @@ main = hspec $ do
 
         it "take out the element we just added from the bottom" $ do
             SL.head (SL.snoc 1 SL.nil) `shouldBe` L.head (1:[])
+
+    describe "last" $ do
+        it "throw error when the list is empty" $ do
+            SL.last SL.nil `shouldThrow` anyErrorCall
+
+        it "give the last element in the list" $ do
+            SL.last (SL.fromList [1 .. 3]) `shouldBe` last [1 .. 3]
+
+        it "give the last element we just added from the front" $ do
+            SL.last (SL.cons 1 SL.nil) `shouldBe` L.last (1:[])
+
+        it "give the last element we just added from the back" $ do
+            SL.last (SL.snoc 1 SL.nil) `shouldBe` L.last (1:[])
