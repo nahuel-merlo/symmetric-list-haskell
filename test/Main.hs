@@ -57,3 +57,7 @@ main = hspec $ do
 
         it "give the last element we just added from the back" $ do
             SL.last (SL.snoc 1 SL.nil) `shouldBe` L.last (1:[])
+
+    describe "tail" $ do
+        it "throw error when the list is empty" $ do
+            evaluate (SL.tail SL.nil) `shouldThrow` anyErrorCall
