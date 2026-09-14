@@ -50,12 +50,12 @@ snoc y (SL (xs, ys))
 head :: SymmetricList a -> a
 head (SL ([], []))    = error "head on empty symmetric list"
 head (SL ((x:_), _)) = x
-head (SL (_, ys))     = (Lst.head . Lst.reverse) ys
+head (SL (_, [y]))     = y
 
 last :: SymmetricList a -> a
 last (SL ([], []))    = error "last on empty symmetric list"
 last (SL (_, (y:_))) = y
-last (SL (xs, _))     = (Lst.head . Lst.reverse) xs
+last (SL ([x], _))     = x
 
 tail :: SymmetricList a -> SymmetricList a
 tail (SL ([], []))  = error "tail on empty symmetric list"
