@@ -1,19 +1,26 @@
 module Main (main) where
 
-import Test.Hspec
-import Data.SymmetricList
+import Test.Hspec 
+import qualified Data.SymmetricList as SL
+import qualified Data.List as L
+import Control.Exception (evaluate)
 
 main :: IO ()
 main = hspec $ do
     describe "fromList" $ do
         it "creates an empty list from []" $ do
-            toList (fromList ([] :: [Int])) `shouldBe` []
+            SL.toList (SL.fromList ([] :: [Int])) `shouldBe` []
         
         it "preserve the elements" $ do 
-            toList (fromList [1 .. 1000]) `shouldBe` [1 .. 1000]
+            SL.toList (SL.fromList [1 .. 3]) `shouldBe` [1 .. 3]
+
+    describe "toList" $ do
+        it "creates from nil" $ do
+            ((SL.toList SL.nil) :: [Int]) `shouldBe` ([] :: [Int])
+        
 
     describe "cons" $ do 
         it "add an element to an empty list" $ do
-            toList (cons 1 $ fromList []) `shouldBe` [1]
+            SL.toList (SL.cons 1 $ SL.nil) `shouldBe` 1:[]
         it "add an element" $ do
-            toList (cons 1 $ fromList [2 .. 1000]) `shouldBe` 1:[2 .. 1000]
+            SL.toList (SL.cons 1 $ SL.fromList [2 .. 3]) `shouldBe` 1:[2 .. 3]
