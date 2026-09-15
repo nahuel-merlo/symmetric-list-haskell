@@ -90,6 +90,9 @@ instance Show a => Show (SymmetricList a) where
 
 instance Eq a => Eq (SymmetricList a) where
     (==) (SL (l, r)) (SL (l', r')) = l == l' && r == r'
+    
+instance Ord a => Ord (SymmetricList a) where
+    (<=) (SL (l, r)) (SL (l', r')) = l <= l' && reverse r <= reverse r'
 
 instance Functor SymmetricList where
     fmap f (SL (xs, ys)) = SL ([f x | x <- xs], [f y | y <- ys]) 
