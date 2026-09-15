@@ -20,23 +20,23 @@ main = hspec $ do
         
 
     describe "cons" $ do 
-        it "add an element to an empty list" $ do
+        it "behaves like (:) on empty lists" $ do
             SL.toList (SL.cons 1 $ SL.nil) `shouldBe` 1:[]
-        it "add an element" $ do
+        it "behaves like (:) on lists" $ do
             SL.toList (SL.cons 1 $ SL.fromList [2 .. 3]) `shouldBe` 1:[2 .. 3]
 
     describe "snoc" $ do
-        it "add an element to an empty list" $ do
+        it "behaves like (++ [x]) on empty lists" $ do
             SL.toList (SL.snoc 1 SL.nil) `shouldBe` [] ++ [1]
 
-        it "add an element to the back" $ do
+        it "behaves like (++ [x]) on lists" $ do
             SL.toList (SL.snoc 3 $ SL.fromList [1 .. 2]) `shouldBe` ([1 .. 2] ++ [3])
 
     describe "head" $ do
-        it "trhow error when the list is empty" $ do
+        it "trhows an error when the list is empty" $ do
             SL.head SL.nil `shouldThrow` anyErrorCall
 
-        it "give the first element in the list" $ do
+        it "behaves like head on lists" $ do
             SL.head (SL.fromList [1 .. 3]) `shouldBe` L.head [1 .. 3]
 
         it "take out the element we just added from the top" $ do
@@ -46,10 +46,10 @@ main = hspec $ do
             SL.head (SL.snoc 1 SL.nil) `shouldBe` L.head (1:[])
 
     describe "last" $ do
-        it "throw error when the list is empty" $ do
+        it "throws an error when the list is empty" $ do
             SL.last SL.nil `shouldThrow` anyErrorCall
 
-        it "give the last element in the list" $ do
+        it "behaves like last on lists" $ do
             SL.last (SL.fromList [1 .. 3]) `shouldBe` last [1 .. 3]
 
         it "give the last element we just added from the front" $ do
@@ -72,7 +72,7 @@ main = hspec $ do
             SL.toList (SL.tail (SL.fromList [1 .. 3])) `shouldBe` L.tail [1 .. 3]
 
     describe "null" $ do
-        it "gives True when the list is empty" $ do
+        it "behaves like null on lists" $ do
             SL.null SL.nil `shouldBe` L.null []
 
         it "gives False when the list has one element" $ do
@@ -85,11 +85,11 @@ main = hspec $ do
         it "give nil when the list is empty" $ do
             ((SL.toList (SL.dropWhile (\x -> True) SL.nil)) :: [Int]) `shouldBe` ((L.dropWhile (\x -> True) []) :: [Int])
 
-        it "give nil when the proposition is a taut." $ do
+        it "returns an empty list when the predicate matches every element" $ do
             SL.toList (SL.dropWhile (\x -> True) $ SL.fromList [1 .. 3]) `shouldBe` L.dropWhile (\x -> True) [1 .. 3]
 
-        it "preserve the elements when the proposition is contra." $ do
+        it "returns the original list when the predicate matches no elements" $ do
             SL.toList (SL.dropWhile (\x -> False) $ SL.fromList [1 .. 3]) `shouldBe` L.dropWhile (\x -> False) [1 .. 3]
 
-        it "remove the elements when the proposition is True" $ do 
+        it "behaves like dropWhile on lists" $ do 
             SL.toList (SL.dropWhile (==2) $ SL.fromList [1 .. 3]) `shouldBe` L.dropWhile (==2) [1 .. 3]
