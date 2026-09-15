@@ -69,7 +69,7 @@ main = hspec $ do
             SL.toList (SL.tail (SL.snoc 1 SL.nil)) `shouldBe` []
 
         it "give the tail of the list" $ do
-            SL.toList (SL.tail (SL.fromList [1 .. 3])) `shouldBe` L.tail [1 .. 3]
+            SL.toList (SL.tail (SL.fromList [1 .. 10])) `shouldBe` L.tail [1 .. 10]
 
     describe "null" $ do
         it "behaves like null on lists" $ do
