@@ -67,6 +67,7 @@ tail (SL (xs, ys))
         (us, vs) = Lst.splitAt ((Lst.length ys) `div` 2) ys
 
 dropWhile :: (a -> Bool) -> SymmetricList a -> SymmetricList a
+dropWhile _ (SL ([], [])) = nil
 dropWhile p sl@(SL (xs, _)) 
     | p $ Lst.head xs = dropWhile p (tail sl)
     | otherwise       = sl
