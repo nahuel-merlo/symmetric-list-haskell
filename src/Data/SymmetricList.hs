@@ -88,6 +88,9 @@ instance Show a => Show (SymmetricList a) where
     show sl = show $ toList sl 
     -- show (SL (xs, ys)) = ("<- ") ++ (show xs) ++ (" | ") ++ (show $ reverse ys) ++ (" ->") 
 
+instance Eq a => Eq (SymmetricList a) where
+    (==) (SL (l, r)) (SL (l', r')) = l == l' && r == r'
+
 instance Functor SymmetricList where
     fmap f (SL (xs, ys)) = SL ([f x | x <- xs], [f y | y <- ys]) 
 
