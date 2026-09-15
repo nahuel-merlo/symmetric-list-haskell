@@ -61,3 +61,12 @@ main = hspec $ do
     describe "tail" $ do
         it "throw error when the list is empty" $ do
             evaluate (SL.tail SL.nil) `shouldThrow` anyErrorCall
+
+        it "give nil when we just added from the front" $ do
+            SL.toList (SL.tail (SL.cons 1 SL.nil)) `shouldBe` []
+
+        it "give nil when we just added from the back" $ do
+            SL.toList (SL.tail (SL.snoc 1 SL.nil)) `shouldBe` []
+
+        it "give the tail of the list" $ do
+            SL.toList (SL.tail (SL.fromList [1 .. 3])) `shouldBe` L.tail [1 .. 3]
