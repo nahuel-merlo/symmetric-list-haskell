@@ -80,3 +80,16 @@ main = hspec $ do
         
         it "gives False when the list has n elemnts" $ do
             SL.null (SL.fromList [1 .. 3]) `shouldBe` L.null [1 .. 3]
+
+    describe "dropWhile" $ do
+        it "give nil when the list is empty" $ do
+            ((SL.toList (SL.dropWhile (\x -> True) SL.nil)) :: [Int]) `shouldBe` ((L.dropWhile (\x -> True) []) :: [Int])
+
+        it "give nil when the proposition is a taut." $ do
+            SL.toList (SL.dropWhile (\x -> True) $ SL.fromList [1 .. 3]) `shouldBe` L.dropWhile (\x -> True) [1 .. 3]
+
+        it "preserve the elements when the proposition is contra." $ do
+            SL.toList (SL.dropWhile (\x -> False) $ SL.fromList [1 .. 3]) `shouldBe` L.dropWhile (\x -> False) [1 .. 3]
+
+        it "remove the elements when the proposition is True" $ do 
+            SL.toList (SL.dropWhile (==2) $ SL.fromList [1 .. 3]) `shouldBe` L.dropWhile (==2) [1 .. 3]
