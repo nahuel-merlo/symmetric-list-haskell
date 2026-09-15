@@ -70,3 +70,13 @@ main = hspec $ do
 
         it "give the tail of the list" $ do
             SL.toList (SL.tail (SL.fromList [1 .. 3])) `shouldBe` L.tail [1 .. 3]
+
+    describe "null" $ do
+        it "gives True when the list is empty" $ do
+            SL.null SL.nil `shouldBe` L.null []
+
+        it "gives False when the list has one element" $ do
+            SL.null (SL.cons 1 SL.nil) `shouldBe` L.null (1:[])
+        
+        it "gives False when the list has n elemnts" $ do
+            SL.null (SL.fromList [1 .. 3]) `shouldBe` L.null [1 .. 3]
