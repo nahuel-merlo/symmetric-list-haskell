@@ -25,8 +25,7 @@ import qualified Data.List as Lst
 
 newtype SymmetricList a = SL ([a], [a]) 
 
-init , fromList :: [a] -> SymmetricList a
-init = fromList
+fromList :: [a] -> SymmetricList a
 fromList l = SL (xs, Lst.reverse ys) 
     where
         (xs, ys) = Lst.splitAt (Lst.length l `div` 2) l
@@ -66,6 +65,12 @@ tail (SL (xs, ys))
     where
         (us, vs) = Lst.splitAt ((Lst.length ys) `div` 2) ys
 
+init :: SymmetricList a -> SymmetricList a
+init (SL ([], [])) = error "init on empty symmetric list"
+init (SL ([], [_])) = nil
+init (SL (xs, [y])) = let (us, vs) = Lst.splitAt ((Lst.length xs) `div` 2) xs in SL (reverse vs, us)
+init (SL (xs, _:ys)) =  SL (xs, ys)
+
 dropWhile :: (a -> Bool) -> SymmetricList a -> SymmetricList a
 dropWhile _ (SL ([], [])) = nil
 dropWhile p sl@(SL (xs, _)) 
@@ -101,5 +106,5 @@ instance Foldable SymmetricList where
     foldr f i (SL (xs, ys)) = foldr f (foldr f i (reverse ys)) xs
 
 instance Applicative SymmetricList where
-    pure x = init [x]
+    pure x = fromList [x]
     (<*>) (SL (fsLeft, fsRight)) (SL (xsLeft, xsRight)) = SL ([ f x | f <- fsLeft, x <- xsLeft], [ f x | f <- fsRight, x <- xsRight]) 
