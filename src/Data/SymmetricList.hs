@@ -73,8 +73,8 @@ init (SL (xs, _:ys)) =  SL (xs, ys)
 
 dropWhile :: (a -> Bool) -> SymmetricList a -> SymmetricList a
 dropWhile _ (SL ([], [])) = nil
-dropWhile p sl@(SL (xs, _)) 
-    | p $ Lst.head xs = dropWhile p (tail sl)
+dropWhile p sl
+    | p $ head sl = dropWhile p (tail sl)
     | otherwise       = sl
 
 null :: SymmetricList a -> Bool
