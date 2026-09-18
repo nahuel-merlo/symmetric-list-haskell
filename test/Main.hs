@@ -6,17 +6,17 @@ import qualified Data.SymmetricList as SL
 import qualified Data.List as L
 import Control.Exception (evaluate)
 
-prop_fromList_toList :: [Int] -> Bool
+prop_fromList_toList :: [Int] -> Property
 prop_fromList_toList xs =
-    SL.toList (SL.fromList xs) == xs
+    True ==> SL.toList (SL.fromList xs) == xs
 
-prop_cons :: Int -> [Int] -> Bool
+prop_cons :: Int -> [Int] -> Property
 prop_cons x xs = 
-    SL.toList (SL.cons x (SL.fromList xs)) == x:xs  
+    True ==> SL.toList (SL.cons x (SL.fromList xs)) == x:xs  
 
-prop_snoc :: Int -> [Int] -> Bool
+prop_snoc :: Int -> [Int] -> Property
 prop_snoc x xs = 
-    SL.toList (SL.snoc x (SL.fromList xs)) == xs ++ [x]
+    True ==> SL.toList (SL.snoc x (SL.fromList xs)) == xs ++ [x]
 
 prop_head :: [Int] -> Property
 prop_head xs = not (null xs) ==> SL.head (SL.fromList xs) == L.head xs
@@ -27,11 +27,11 @@ prop_last xs = not (null xs) ==> SL.last (SL.fromList xs) == L.last xs
 prop_tail :: [Int] -> Property
 prop_tail xs = not (null xs) ==> SL.toList (SL.tail (SL.fromList xs)) == L.tail xs
 
-prop_null :: [Int] -> Bool
-prop_null xs = SL.null (SL.fromList xs) == L.null xs 
+prop_null :: [Int] -> Property
+prop_null xs = True ==> SL.null (SL.fromList xs) == L.null xs 
 
-prop_dropWhile :: Fun Int Bool -> [Int] -> Bool
-prop_dropWhile f xs = SL.toList (SL.dropWhile (applyFun f) (SL.fromList xs)) == L.dropWhile (applyFun f) xs
+prop_dropWhile :: Fun Int Bool -> [Int] -> Property
+prop_dropWhile f xs = True ==> SL.toList (SL.dropWhile (applyFun f) (SL.fromList xs)) == L.dropWhile (applyFun f) xs
 
 main :: IO ()
 main = hspec $ do
