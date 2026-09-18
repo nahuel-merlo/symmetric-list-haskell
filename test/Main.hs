@@ -33,6 +33,9 @@ prop_null xs = True ==> SL.null (SL.fromList xs) == L.null xs
 prop_dropWhile :: Fun Int Bool -> [Int] -> Property
 prop_dropWhile f xs = True ==> SL.toList (SL.dropWhile (applyFun f) (SL.fromList xs)) == L.dropWhile (applyFun f) xs
 
+prop_reverse :: [Int] -> Property 
+prop_reverse xs = True ==> SL.toList (SL.reverse (SL.fromList xs)) == L.reverse xs
+
 main :: IO ()
 main = hspec $ do
     describe "fromList" $ do
@@ -104,3 +107,8 @@ main = hspec $ do
 
         it "behaves like dropWhile on lists" $ do 
             property prop_dropWhile
+
+    describe "reverse" $ do
+        it "behaves like reverse on lists" $ do
+            property prop_reverse
+
