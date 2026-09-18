@@ -104,6 +104,7 @@ instance Functor SymmetricList where
 
 instance Foldable SymmetricList where
     foldr f i (SL _ (xs, ys)) = foldr f (foldr f i (Lst.reverse ys)) xs
+    length (SL len _) = len
 
 instance Applicative SymmetricList where
     pure x = fromList [x]
