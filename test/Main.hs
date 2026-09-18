@@ -36,6 +36,9 @@ prop_dropWhile f xs = True ==> SL.toList (SL.dropWhile (applyFun f) (SL.fromList
 prop_reverse :: [Int] -> Property 
 prop_reverse xs = True ==> SL.toList (SL.reverse (SL.fromList xs)) == L.reverse xs
 
+prop_length :: [Int] -> Property
+prop_length xs = True ==> length (SL.fromList xs) == length xs
+
 main :: IO ()
 main = hspec $ do
     describe "fromList" $ do
@@ -111,4 +114,8 @@ main = hspec $ do
     describe "reverse" $ do
         it "behaves like reverse on lists" $ do
             property prop_reverse
+
+    describe "length" $ do
+        it "behaves like length on lists" $ do
+            property prop_length
 
