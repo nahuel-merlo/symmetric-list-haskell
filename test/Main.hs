@@ -39,6 +39,9 @@ prop_reverse xs = True ==> SL.toList (SL.reverse (SL.fromList xs)) == L.reverse 
 prop_length :: [Int] -> Property
 prop_length xs = True ==> length (SL.fromList xs) == length xs
 
+prop_map :: Fun Int Int -> [Int] -> Property
+prop_map f xs = True ==> SL.toList (SL.map (applyFun f) (SL.fromList xs)) == map (applyFun f) xs
+
 main :: IO ()
 main = hspec $ do
     describe "fromList" $ do
@@ -119,3 +122,6 @@ main = hspec $ do
         it "behaves like length on lists" $ do
             property prop_length
 
+    describe "map" $ do
+        it "behaves like map on lists" $ do
+            property prop_map
