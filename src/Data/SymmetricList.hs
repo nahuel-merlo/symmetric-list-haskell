@@ -10,10 +10,12 @@ module Data.SymmetricList (
     tail,
     dropWhile,
     null,
-    single
+    single,
+    reverse,
+    map
 ) where
 
-import Prelude hiding (head, tail, last, dropWhile, init, null)
+import Prelude hiding (head, tail, last, dropWhile, init, null, reverse, map)
 import qualified Data.List as Lst
 
 {-- 
@@ -86,12 +88,18 @@ single (SL _ ([_], [])) = True
 single (SL _ ([], [_])) = True
 single _            = False
 
+reverse :: SymmetricList a -> SymmetricList a
+reverse (SL len (xs, ys)) = SL len (ys, xs)
+
+map :: (a -> b) -> SymmetricList a -> SymmetricList b 
+map = fmap
+
 {-- Instances --}
 
 instance Show a => Show (SymmetricList a) where
-    -- show (SL l) = show l
+    -- show (SL _ l) = show l
     show sl = show $ toList sl 
-    -- show (SL (xs, ys)) = ("<- ") ++ (show xs) ++ (" | ") ++ (show $ reverse ys) ++ (" ->") 
+    -- show (SL len (xs, ys)) = ("<- ") ++ (show xs) ++ (" | ") ++ (show $ reverse ys) ++ (" ->") 
 
 instance Eq a => Eq (SymmetricList a) where
     (==) (SL _ (l, r)) (SL _ (l', r')) = l == l' && r == r'
@@ -105,7 +113,3 @@ instance Functor SymmetricList where
 instance Foldable SymmetricList where
     foldr f i (SL _ (xs, ys)) = foldr f (foldr f i (Lst.reverse ys)) xs
     length (SL len _) = len
-
-instance Applicative SymmetricList where
-    pure x = fromList [x]
-    (<*>) (SL (fsLeft, fsRight)) (SL (xsLeft, xsRight)) = SL ([ f x | f <- fsLeft, x <- xsLeft], [ f x | f <- fsRight, x <- xsRight]) 
