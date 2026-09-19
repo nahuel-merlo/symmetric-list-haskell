@@ -137,3 +137,17 @@ main = hspec $ do
     describe "map" $ do
         it "behaves like map on lists" $ do
             property prop_map
+
+    describe "uncons" $ do
+        it "behaves like uncons on lists" $ do
+            property prop_uncons
+        
+        it "give Nothing when the list is empty" $ do
+            SL.uncons (SL.fromList ([]:: [Int])) `shouldBe` Nothing
+
+    describe "unsnoc" $ do
+        it "behaves like unsnoc on lists" $ do
+            property prop_unsnoc
+
+        it "give Nothing when the list is empty" $ do
+            SL.unsnoc (SL.fromList ([]:: [Int])) `shouldBe` Nothing
