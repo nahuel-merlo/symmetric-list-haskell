@@ -12,7 +12,9 @@ module Data.SymmetricList (
     null,
     single,
     reverse,
-    map
+    map,
+    uncons,
+    unsnoc
 ) where
 
 import Prelude hiding (head, tail, last, dropWhile, init, null, reverse, map)
@@ -93,6 +95,16 @@ reverse (SL len (xs, ys)) = SL len (ys, xs)
 
 map :: (a -> b) -> SymmetricList a -> SymmetricList b 
 map = fmap
+
+uncons :: SymmetricList a -> Maybe (a, SymmetricList a) 
+uncons (SL _ ([], [])) = Nothing
+uncons (SL len (x:xs, ys)) = Just (x, SL (len-1) (xs,ys))
+uncons (SL _ ([], [y])) = Just (y, nil)
+
+unsnoc :: SymmetricList a -> Maybe (SymmetricList a, a)
+unsnoc (SL _ ([], [])) = Nothing 
+unsnoc (SL len (xs, y:ys)) = Just (SL (len-1) (xs, ys), y)
+unsnoc (SL _ ([x], [])) = Just (nil, x)
 
 {-- Instances --}
 
