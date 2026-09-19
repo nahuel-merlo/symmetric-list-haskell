@@ -42,6 +42,18 @@ prop_length xs = True ==> length (SL.fromList xs) == length xs
 prop_map :: Fun Int Int -> [Int] -> Property
 prop_map f xs = True ==> SL.toList (SL.map (applyFun f) (SL.fromList xs)) == map (applyFun f) xs
 
+prop_uncons :: [Int] -> Property
+prop_uncons xs = not (null xs) ==> (y == x && SL.toList sl == ys)
+    where 
+        Just (x, sl) = SL.uncons (SL.fromList xs)
+        Just (y, ys) = L.uncons xs
+
+prop_unsnoc :: [Int] -> Property
+prop_unsnoc xs = not (null xs) ==> (x == y && SL.toList sl == ys) 
+    where 
+        Just (sl, x) = SL.unsnoc (SL.fromList xs)
+        Just (ys, y) = L.unsnoc xs
+
 main :: IO ()
 main = hspec $ do
     describe "fromList" $ do
