@@ -48,6 +48,9 @@ prop_uncons xs = not (null xs) ==> (y == x && SL.toList sl == ys)
         Just (x, sl) = SL.uncons (SL.fromList xs)
         Just (y, ys) = L.uncons xs
 
+prop_conc :: [Int] -> [Int] -> Property
+prop_conc xs ys = True ==> SL.toList ((SL.fromList xs) SL.++ (SL.fromList ys)) == xs L.++ ys 
+
 prop_unsnoc :: [Int] -> Property
 prop_unsnoc xs = not (null xs) ==> (x == y && SL.toList sl == ys) 
     where 
@@ -151,3 +154,7 @@ main = hspec $ do
 
         it "give Nothing when the list is empty" $ do
             SL.unsnoc (SL.fromList ([]:: [Int])) `shouldBe` Nothing
+
+    describe "(++)" $ do
+        it "behaves like (++) on lists" $ do
+            property prop_conc
