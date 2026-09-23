@@ -13,6 +13,7 @@ module Data.SymmetricList (
     single,
     reverse,
     map,
+    (++),
     uncons,
     unsnoc
 ) where
@@ -113,6 +114,20 @@ unsnoc :: SymmetricList a -> Maybe (SymmetricList a, a)
 unsnoc (SL _ _ ([], [])) = Nothing 
 unsnoc (SL lenL lenR (xs, y:ys)) = Just (SL lenL (lenR-1) (xs, ys), y)
 unsnoc (SL _ _ ([x], [])) = Just (nil, x)
+
+(++) :: SymmetricList a -> SymmetricList a -> SymmetricList a
+(++) l@(SL lenL lenR (xs, ys)) r@(SL lenL' lenR' (xs', ys')) 
+    | null l = r
+    | null r = l
+    | single l && single r = SL 1 1 (xs Lst.++ ys, ys' Lst.++ xs')
+    | single l = SL (1+lenL') lenR'  (xs Lst.++ (ys Lst.++ xs'), ys')
+    | single r = SL lenL (lenR+1) (xs, (ys' Lst.++ xs') Lst.++ ys)
+    | length l <= length r = SL (lenL + lenR + lenL') lenR' (xs Lst.++ (ys `revAppend` xs'), ys')
+    | otherwise = SL lenL (lenR' + lenL' + lenR) (xs, ys' Lst.++ (xs' `revAppend` ys))
+    where
+        revAppend :: [a] -> [a] -> [a]
+        revAppend []     acc = acc
+        revAppend (z:zs) acc = revAppend zs (z:acc)
 
 {-- Instances --}
 
