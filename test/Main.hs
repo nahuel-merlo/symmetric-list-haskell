@@ -57,6 +57,9 @@ prop_unsnoc xs = not (null xs) ==> (x == y && SL.toList sl == ys)
         Just (sl, x) = SL.unsnoc (SL.fromList xs)
         Just (ys, y) = L.unsnoc xs
 
+prop_singleton :: Int -> Property
+prop_singleton x = True ==> (SL.toList . SL.singleton) x == L.singleton x 
+
 main :: IO ()
 main = hspec $ do
     describe "fromList" $ do
@@ -158,3 +161,7 @@ main = hspec $ do
     describe "(++)" $ do
         it "behaves like (++) on lists" $ do
             property prop_conc
+
+    describe "singleton" $ do
+        it "behaves like singleton on lists" $ do
+            property prop_singleton
