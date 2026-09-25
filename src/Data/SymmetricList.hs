@@ -11,14 +11,15 @@ module Data.SymmetricList (
     dropWhile,
     null,
     single,
+    singleton,
     reverse,
     map,
     (++),
     uncons,
-    unsnoc
+    unsnoc,
 ) where
 
-import Prelude hiding (head, tail, last, dropWhile, init, null, reverse, map)
+import Prelude hiding (head, tail, last, dropWhile, init, null, reverse, map, filter, (++))
 import qualified Data.List as Lst
 
 {-- 
@@ -99,6 +100,9 @@ single (SL _ _ ([_], [])) = True
 single (SL _ _ ([], [_])) = True
 single _            = False
 
+singleton :: a -> SymmetricList a  
+singleton x = cons x nil
+
 reverse :: SymmetricList a -> SymmetricList a
 reverse (SL lenL lenR (xs, ys)) = SL lenR lenL (ys, xs)
 
@@ -132,8 +136,8 @@ unsnoc (SL _ _ ([x], [])) = Just (nil, x)
 {-- Instances --}
 
 instance Show a => Show (SymmetricList a) where
-    -- show (SL _ l) = show l
-    show sl = show $ toList sl 
+    show (SL _ _ l) = show l
+    -- show sl = show $ toList sl 
     -- show (SL len (xs, ys)) = ("<- ") ++ (show xs) ++ (" | ") ++ (show $ reverse ys) ++ (" ->") 
 
 instance Eq a => Eq (SymmetricList a) where
