@@ -48,6 +48,9 @@ fromList l = SL lenL lenR (xs, Lst.reverse ys)
 toList :: SymmetricList a -> [a]
 toList (SL _ _ (xs, ys)) = xs Lst.++ Lst.reverse ys
 
+-- | O(1). Returns an empty symmetric list
+--
+-- > toList nil == []
 nil :: SymmetricList a
 nil = SL 0 0 ([], [])
 
