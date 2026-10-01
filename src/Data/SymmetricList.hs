@@ -54,6 +54,9 @@ toList (SL _ _ (xs, ys)) = xs Lst.++ Lst.reverse ys
 nil :: SymmetricList a
 nil = SL 0 0 ([], [])
 
+-- | O(1). Adds an element to the front of a symmetric list.
+--
+-- > cons x (fromList xs) == x:xs
 cons :: a -> SymmetricList a -> SymmetricList a
 cons x (SL lenL lenR (xs, ys))
     | Lst.null ys = SL (lenL+1) lenR (ys, [x])
