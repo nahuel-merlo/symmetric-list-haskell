@@ -31,6 +31,9 @@ import qualified Data.List as Lst
 
 data SymmetricList a = SL !Int !Int ([a], [a]) 
 
+-- | O(n).Returns the Symmetric representation of the list
+--  
+-- > (toList . fromList) xs == xs
 fromList :: [a] -> SymmetricList a
 fromList l = SL lenL lenR (xs, Lst.reverse ys) 
     where
