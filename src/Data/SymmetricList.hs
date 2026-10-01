@@ -31,9 +31,9 @@ import qualified Data.List as Lst
 
 data SymmetricList a = SL !Int !Int ([a], [a]) 
 
--- | O(n).Returns the Symmetric representation of the list
+-- | O(n). Returns the symmetric representation of the list
 --  
--- > (toList . fromList) xs == xs
+-- > xs == (toList . fromList) xs
 fromList :: [a] -> SymmetricList a
 fromList l = SL lenL lenR (xs, Lst.reverse ys) 
     where
@@ -42,6 +42,9 @@ fromList l = SL lenL lenR (xs, Lst.reverse ys)
         lenR = len - lenL
         (xs, ys) = Lst.splitAt lenL l
 
+-- | O(n). Returns the list representation of the symmetric lits
+--
+-- > (toList . fromList) xs == xs
 toList :: SymmetricList a -> [a]
 toList (SL _ _ (xs, ys)) = xs Lst.++ Lst.reverse ys
 
