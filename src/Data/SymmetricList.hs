@@ -59,12 +59,12 @@ nil = SL 0 0 ([], [])
 -- > cons x (fromList xs) == x:xs
 cons :: a -> SymmetricList a -> SymmetricList a
 cons x (SL lenL lenR (xs, ys))
-    | Lst.null ys = SL (lenL+1) lenR (ys, [x])
+    | Lst.null ys = SL 1 (lenL)  ([x], xs)
     | otherwise   = SL (lenL+1) lenR (x:xs, ys)
 
 snoc :: a -> SymmetricList a -> SymmetricList a
 snoc y (SL lenL lenR (xs, ys))
-    | Lst.null xs = SL (lenL) (lenR+1) (ys, [y])
+    | Lst.null xs = SL (lenR) 1 (ys, [y])
     | otherwise   = SL (lenL) (lenR+1) (xs, y:ys)
 
 head :: SymmetricList a -> a
