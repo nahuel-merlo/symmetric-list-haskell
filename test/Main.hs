@@ -159,8 +159,11 @@ main = hspec $ do
             property prop_reverse
 
     describe "length" $ do
-        it "behaves like length on lists" $ do
+        it "behaves like length on lists using fromList" $ do
             property prop_length
+        
+        it "behaves like length on lists using Seed" $ do
+            property prop_length_seed
 
     describe "map" $ do
         it "behaves like map on lists" $ do
