@@ -90,6 +90,10 @@ head (SL _ _ ([], []))    = error "head on empty symmetric list"
 head (SL _ _ ((x:_), _)) = x
 head (SL _ _ (_, [y]))     = y
 
+-- | O(1). Returns the last element of a non-empty symmetric list.
+-- Fails on an empty symmetric list.
+--
+-- > last (fromList xs) == Prelude.last xs
 last :: SymmetricList a -> a
 last (SL _ _ ([], []))    = error "last on empty symmetric list"
 last (SL _ _ (_, (y:_))) = y
