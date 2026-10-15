@@ -55,8 +55,11 @@ prop_head seeds = not (null xs) ==> SL.head s == L.head xs
         s  = fromSeeds seeds
         xs = SL.toList s
 
-prop_last :: [Int] -> Property
-prop_last xs = not (null xs) ==> SL.last (SL.fromList xs) == L.last xs
+prop_last :: [Seed Int] -> Property
+prop_last seeds = not (null xs) ==> SL.last s == L.last xs
+    where
+        s  = fromSeeds seeds
+        xs = SL.toList s
 
 prop_tail :: [Int] -> Property
 prop_tail xs = not (null xs) ==> SL.toList (SL.tail (SL.fromList xs)) == L.tail xs
