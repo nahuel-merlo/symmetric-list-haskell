@@ -128,6 +128,9 @@ dropWhile p sl
     | p $ head sl = dropWhile p (tail sl)
     | otherwise       = sl
 
+-- | O(1). Checks whether a symmetric list is empty.
+--
+-- > null (fromList xs) == Prelude.null xs
 null :: SymmetricList a -> Bool
 null (SL _ _ ([], [])) = True
 null _           = False
