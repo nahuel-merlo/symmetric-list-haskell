@@ -79,7 +79,7 @@ cons x (SL lenL lenR (xs, ys))
 
 -- | \(\mathcal{O}(1)\). Adds an element to the end of a symmetric list.
 --
--- On lists: @xs ++ [x]@ is \(\mathcal{O}(n)\).
+-- __Faster than lists:__ @xs ++ [x]@ is \(\mathcal{O}(n)\).
 --
 -- > toList (snoc x (fromList xs)) == xs ++ [x]
 snoc :: a -> SymmetricList a -> SymmetricList a
@@ -101,7 +101,7 @@ head (SL _ _ (_, [y]))     = y
 -- | \(\mathcal{O}(1)\). Returns the last element of a non-empty symmetric list.
 -- Fails on an empty symmetric list.
 --
--- On lists: 'Prelude.last' from "Prelude" is \(\mathcal{O}(n)\).
+-- __Faster than lists:__ 'Prelude.last' from "Prelude" is \(\mathcal{O}(n)\).
 --
 -- > last (fromList xs) == Prelude.last xs
 last :: SymmetricList a -> a
@@ -124,7 +124,7 @@ tail (SL lenL lenR (_:xs, ys)) = SL (lenL-1) lenR (xs, ys)
 -- | \(\mathcal{O}(1)\) amortized, \(\mathcal{O}(n)\) worst case. Removes the last element of a
 -- non-empty symmetric list. Fails on an empty symmetric list.
 --
--- On lists: 'Prelude.init' from "Prelude" is \(\mathcal{O}(n)\).
+-- __Faster than lists:__ 'Prelude.init' from "Prelude" is \(\mathcal{O}(n)\).
 --
 -- > toList (init (fromList xs)) == Prelude.init xs
 init :: SymmetricList a -> SymmetricList a
@@ -171,7 +171,7 @@ singleton x = cons x nil
 
 -- | \(\mathcal{O}(1)\). Reverses a symmetric list by swapping its left and right lists.
 --
--- On lists: 'Prelude.reverse' from "Prelude" is \(\mathcal{O}(n)\).
+-- __Faster than lists:__ 'Prelude.reverse' from "Prelude" is \(\mathcal{O}(n)\).
 --
 -- > toList (reverse (fromList xs)) == Prelude.reverse xs
 reverse :: SymmetricList a -> SymmetricList a
@@ -201,7 +201,7 @@ uncons (SL _ _ ([], [y])) = Just (y, nil)
 -- elements but the last one and the last element, or returns 'Nothing' if it
 -- is empty.
 --
--- On lists: 'Data.List.unsnoc' from "Data.List" is \(\mathcal{O}(n)\).
+-- __Faster than lists:__ 'Data.List.unsnoc' from "Data.List" is \(\mathcal{O}(n)\).
 --
 -- > fmap (\(sl, x) -> (toList sl, x)) (unsnoc (fromList xs)) == Data.List.unsnoc xs
 unsnoc :: SymmetricList a -> Maybe (SymmetricList a, a)
@@ -213,7 +213,7 @@ unsnoc (SL _ _ ([x], [])) = Just (nil, x)
 -- | \(\mathcal{O}(\min(m, n))\), where m and n are the lengths of the symmetric lists.
 -- Appends two symmetric lists, traversing only the shorter one.
 --
--- On lists: '(Prelude.++)' from "Prelude" is \(\mathcal{O}(m)\), since it traverses the whole first list.
+-- __Faster than lists:__ '(Prelude.++)' from "Prelude" is \(\mathcal{O}(m)\), since it traverses the whole first list.
 --
 -- > toList (fromList xs ++ fromList ys) == xs Prelude.++ ys
 (++) :: SymmetricList a -> SymmetricList a -> SymmetricList a
