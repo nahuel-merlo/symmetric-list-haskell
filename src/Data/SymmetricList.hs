@@ -67,12 +67,15 @@ nil = SL 0 0 ([], [])
 
 -- | O(1). Adds an element to the front of a symmetric list.
 --
--- > cons x (fromList xs) == x:xs
+-- > toList (cons x (fromList xs)) == x:xs
 cons :: a -> SymmetricList a -> SymmetricList a
 cons x (SL lenL lenR (xs, ys))
     | Lst.null ys = SL 1 (lenL)  ([x], xs)
     | otherwise   = SL (lenL+1) lenR (x:xs, ys)
 
+-- | O(1). Adds an element to the end of a symmetric list.
+--
+-- > toList (snoc x (fromList xs)) == xs ++ [x]
 snoc :: a -> SymmetricList a -> SymmetricList a
 snoc y (SL lenL lenR (xs, ys))
     | Lst.null xs = SL (lenR) 1 (ys, [y])
