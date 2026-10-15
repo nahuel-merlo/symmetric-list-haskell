@@ -48,6 +48,14 @@ fromList l = SL lenL lenR (xs, Lst.reverse ys)
 toList :: SymmetricList a -> [a]
 toList (SL _ _ (xs, ys)) = xs Lst.++ Lst.reverse ys
 
+balance :: SymmetricList a -> SymmetricList a
+balance (SL lenL lenR (xs, ys)) = (SL newLenL newLenR (us, Lst.reverse vs))
+    where 
+        totalLen = lenL + lenR
+        newLenL = (totalLen `div` 2)
+        newLenR = totalLen - newLenL
+        (us, vs) = Lst.splitAt newLenL (xs Lst.++ (Lst.reverse ys))
+
 -- | O(1). Returns an empty symmetric list
 --
 -- > toList nil == []
@@ -80,21 +88,13 @@ last (SL _ _([x], _))     = x
 tail :: SymmetricList a -> SymmetricList a
 tail (SL _ _ ([], []))  = error "tail on empty symmetric list"
 tail (SL _ _([], [_])) = nil
-tail (SL _ lenR ([_], ys)) = SL newLenL newLenR (Lst.reverse vs, us)
-    where
-        newLenR = (lenR) `div` 2
-        newLenL = lenR - newLenR
-        (us, vs) = Lst.splitAt (newLenR) ys
+tail (SL _ lenR ([_], ys)) = balance (SL 0 lenR ([], ys))
 tail (SL lenL lenR (_:xs, ys)) = SL (lenL-1) lenR (xs, ys)    
 
 init :: SymmetricList a -> SymmetricList a
 init (SL _ _ ([], [])) = error "init on empty symmetric list"
 init (SL _ _ ([], [_])) = nil
-init (SL lenL lenR (xs, [_])) = SL newLenL newLenR (us, Lst.reverse vs)
-    where 
-        newLenL = (lenL `div` 2)
-        newLenR = lenL - newLenL
-        (us, vs) = Lst.splitAt newLenL xs
+init (SL lenL _ (xs, [_])) = balance (SL lenL 0 (xs, []))
 init (SL lenL lenR (xs, _:ys)) =  SL lenL (lenR-1) (xs, ys)
 
 dropWhile :: (a -> Bool) -> SymmetricList a -> SymmetricList a
