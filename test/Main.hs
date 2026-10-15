@@ -87,11 +87,13 @@ prop_length seeds = True ==> length (SL.fromList xs) == length xs
     where
         xs = SL.toList (fromSeeds seeds)
 
-prop_map :: Fun Int Int -> [Int] -> Property
-prop_map f xs = True ==> SL.toList (SL.map (applyFun f) (SL.fromList xs)) == map (applyFun f) xs
+prop_map :: Fun Int Int -> [Seed Int] -> Property
+prop_map f seeds = True ==> SL.toList (SL.map (applyFun f) s) == map (applyFun f) (SL.toList s)
+    where
+        s = fromSeeds seeds
 
-prop_uncons :: [Int] -> Property
-prop_uncons xs = not (null xs) ==> (y == x && SL.toList sl == ys)
+prop_uncons :: [Seed Int] -> Property
+prop_uncons seeds = not (null xs) ==> (y == x && SL.toList sl == ys)
     where 
         Just (x, sl) = SL.uncons (SL.fromList xs)
         Just (y, ys) = L.uncons xs
