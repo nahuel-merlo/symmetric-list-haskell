@@ -72,8 +72,10 @@ prop_null seeds = True ==> SL.null s == L.null (SL.toList s)
     where
         s = fromSeeds seeds
 
-prop_dropWhile :: Fun Int Bool -> [Int] -> Property
-prop_dropWhile f xs = True ==> SL.toList (SL.dropWhile (applyFun f) (SL.fromList xs)) == L.dropWhile (applyFun f) xs
+prop_dropWhile :: Fun Int Bool -> [Seed Int] -> Property
+prop_dropWhile f seeds = True ==> SL.toList (SL.dropWhile (applyFun f) s) == L.dropWhile (applyFun f) (SL.toList s)
+    where
+        s = fromSeeds seeds
 
 prop_reverse :: [Int] -> Property 
 prop_reverse xs = True ==> SL.toList (SL.reverse (SL.fromList xs)) == L.reverse xs
