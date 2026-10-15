@@ -37,9 +37,11 @@ prop_fromList_toList :: [Int] -> Property
 prop_fromList_toList xs =
     True ==> SL.toList (SL.fromList xs) == xs
 
-prop_cons :: Int -> [Int] -> Property
-prop_cons x xs = 
-    True ==> SL.toList (SL.cons x (SL.fromList xs)) == x:xs  
+prop_cons :: Int -> [Seed Int] -> Property
+prop_cons x seeds = 
+    True ==> SL.toList (SL.cons x s) == x:SL.toList s
+    where
+        s = fromSeeds seeds
 
 prop_snoc :: Int -> [Int] -> Property
 prop_snoc x xs = 
