@@ -143,6 +143,9 @@ single (SL _ _ ([_], [])) = True
 single (SL _ _ ([], [_])) = True
 single _            = False
 
+-- | O(1). Returns a symmetric list with a single element.
+--
+-- > toList (singleton x) == [x]
 singleton :: a -> SymmetricList a  
 singleton x = cons x nil
 
