@@ -31,7 +31,7 @@ import qualified Data.List as Lst
 
 data SymmetricList a = SL !Int !Int ([a], [a]) 
 
--- | O(n). Returns the symmetric representation of the list
+-- | \(\mathcal{O}(n)\). Returns the symmetric representation of the list
 --  
 -- > xs == (toList . fromList) xs
 fromList :: [a] -> SymmetricList a
@@ -42,13 +42,13 @@ fromList l = SL lenL lenR (xs, Lst.reverse ys)
         lenR = len - lenL
         (xs, ys) = Lst.splitAt lenL l
 
--- | O(n). Returns the list representation of the symmetric lits
+-- | \(\mathcal{O}(n)\). Returns the list representation of the symmetric lits
 --
 -- > (toList . fromList) xs == xs
 toList :: SymmetricList a -> [a]
 toList (SL _ _ (xs, ys)) = xs Lst.++ Lst.reverse ys
 
--- | O(n). Splits the elements evenly between the left and right lists
+-- | \(\mathcal{O}(n)\). Splits the elements evenly between the left and right lists
 --
 -- > toList (balance sl) == toList sl
 balance :: SymmetricList a -> SymmetricList a
@@ -59,13 +59,13 @@ balance (SL lenL lenR (xs, ys)) = (SL newLenL newLenR (us, Lst.reverse vs))
         newLenR = totalLen - newLenL
         (us, vs) = Lst.splitAt newLenL (xs Lst.++ (Lst.reverse ys))
 
--- | O(1). Returns an empty symmetric list
+-- | \(\mathcal{O}(1)\). Returns an empty symmetric list
 --
 -- > toList nil == []
 nil :: SymmetricList a
 nil = SL 0 0 ([], [])
 
--- | O(1). Adds an element to the front of a symmetric list.
+-- | \(\mathcal{O}(1)\). Adds an element to the front of a symmetric list.
 --
 -- > toList (cons x (fromList xs)) == x:xs
 cons :: a -> SymmetricList a -> SymmetricList a
@@ -73,7 +73,7 @@ cons x (SL lenL lenR (xs, ys))
     | Lst.null ys = SL 1 (lenL)  ([x], xs)
     | otherwise   = SL (lenL+1) lenR (x:xs, ys)
 
--- | O(1). Adds an element to the end of a symmetric list.
+-- | \(\mathcal{O}(1)\). Adds an element to the end of a symmetric list.
 --
 -- > toList (snoc x (fromList xs)) == xs ++ [x]
 snoc :: a -> SymmetricList a -> SymmetricList a
@@ -81,7 +81,7 @@ snoc y (SL lenL lenR (xs, ys))
     | Lst.null xs = SL (lenR) 1 (ys, [y])
     | otherwise   = SL (lenL) (lenR+1) (xs, y:ys)
 
--- | O(1). Returns the first element of a non-empty symmetric list.
+-- | \(\mathcal{O}(1)\). Returns the first element of a non-empty symmetric list.
 -- Fails on an empty symmetric list.
 --
 -- > head (fromList xs) == Prelude.head xs
@@ -90,7 +90,7 @@ head (SL _ _ ([], []))    = error "head on empty symmetric list"
 head (SL _ _ ((x:_), _)) = x
 head (SL _ _ (_, [y]))     = y
 
--- | O(1). Returns the last element of a non-empty symmetric list.
+-- | \(\mathcal{O}(1)\). Returns the last element of a non-empty symmetric list.
 -- Fails on an empty symmetric list.
 --
 -- > last (fromList xs) == Prelude.last xs
@@ -99,7 +99,7 @@ last (SL _ _ ([], []))    = error "last on empty symmetric list"
 last (SL _ _ (_, (y:_))) = y
 last (SL _ _([x], _))     = x
 
--- | O(1) amortized, O(n) worst case. Removes the first element of a
+-- | \(\mathcal{O}(1)\) amortized, \(\mathcal{O}(n)\) worst case. Removes the first element of a
 -- non-empty symmetric list. Fails on an empty symmetric list.
 --
 -- > toList (tail (fromList xs)) == Prelude.tail xs
@@ -109,7 +109,7 @@ tail (SL _ _([], [_])) = nil
 tail (SL _ lenR ([_], ys)) = balance (SL 0 lenR ([], ys))
 tail (SL lenL lenR (_:xs, ys)) = SL (lenL-1) lenR (xs, ys)    
 
--- | O(1) amortized, O(n) worst case. Removes the last element of a
+-- | \(\mathcal{O}(1)\) amortized, \(\mathcal{O}(n)\) worst case. Removes the last element of a
 -- non-empty symmetric list. Fails on an empty symmetric list.
 --
 -- > toList (init (fromList xs)) == Prelude.init xs
@@ -119,7 +119,7 @@ init (SL _ _ ([], [_])) = nil
 init (SL lenL _ (xs, [_])) = balance (SL lenL 0 (xs, []))
 init (SL lenL lenR (xs, _:ys)) =  SL lenL (lenR-1) (xs, ys)
 
--- | O(n). Removes the longest prefix whose elements satisfy the predicate.
+-- | \(\mathcal{O}(n)\). Removes the longest prefix whose elements satisfy the predicate.
 --
 -- > toList (dropWhile p (fromList xs)) == Prelude.dropWhile p xs
 dropWhile :: (a -> Bool) -> SymmetricList a -> SymmetricList a
@@ -128,14 +128,14 @@ dropWhile p sl
     | p $ head sl = dropWhile p (tail sl)
     | otherwise       = sl
 
--- | O(1). Checks whether a symmetric list is empty.
+-- | \(\mathcal{O}(1)\). Checks whether a symmetric list is empty.
 --
 -- > null (fromList xs) == Prelude.null xs
 null :: SymmetricList a -> Bool
 null (SL _ _ ([], [])) = True
 null _           = False
 
--- | O(1). Checks whether a symmetric list has exactly one element.
+-- | \(\mathcal{O}(1)\). Checks whether a symmetric list has exactly one element.
 --
 -- > single (fromList xs) == (length xs == 1)
 single :: SymmetricList a -> Bool
@@ -143,25 +143,25 @@ single (SL _ _ ([_], [])) = True
 single (SL _ _ ([], [_])) = True
 single _            = False
 
--- | O(1). Returns a symmetric list with a single element.
+-- | \(\mathcal{O}(1)\). Returns a symmetric list with a single element.
 --
 -- > toList (singleton x) == [x]
 singleton :: a -> SymmetricList a  
 singleton x = cons x nil
 
--- | O(1). Reverses a symmetric list by swapping its left and right lists.
+-- | \(\mathcal{O}(1)\). Reverses a symmetric list by swapping its left and right lists.
 --
 -- > toList (reverse (fromList xs)) == Prelude.reverse xs
 reverse :: SymmetricList a -> SymmetricList a
 reverse (SL lenL lenR (xs, ys)) = SL lenR lenL (ys, xs)
 
--- | O(n). Applies a function to every element of a symmetric list.
+-- | \(\mathcal{O}(n)\). Applies a function to every element of a symmetric list.
 --
 -- > toList (map f (fromList xs)) == Prelude.map f xs
 map :: (a -> b) -> SymmetricList a -> SymmetricList b 
 map = fmap
 
--- | O(1) amortized, O(n) worst case. Splits a symmetric list into its first
+-- | \(\mathcal{O}(1)\) amortized, \(\mathcal{O}(n)\) worst case. Splits a symmetric list into its first
 -- element and the rest, or returns 'Nothing' if it is empty.
 --
 -- > fmap (fmap toList) (uncons (fromList xs)) == Data.List.uncons xs
@@ -171,7 +171,7 @@ uncons (SL _ lenR ([x], ys)) = Just (x, balance (SL 0 lenR ([], ys)))
 uncons (SL lenL lenR (x:xs, ys)) = Just (x, SL (lenL-1) lenR (xs,ys))
 uncons (SL _ _ ([], [y])) = Just (y, nil)
 
--- | O(1) amortized, O(n) worst case. Splits a symmetric list into all its
+-- | \(\mathcal{O}(1)\) amortized, \(\mathcal{O}(n)\) worst case. Splits a symmetric list into all its
 -- elements but the last one and the last element, or returns 'Nothing' if it
 -- is empty.
 --
@@ -182,7 +182,7 @@ unsnoc (SL lenL _ (xs, [y])) = Just (balance (SL lenL 0 (xs, [])), y)
 unsnoc (SL lenL lenR (xs, y:ys)) = Just (SL lenL (lenR-1) (xs, ys), y)
 unsnoc (SL _ _ ([x], [])) = Just (nil, x)
 
--- | O(min(m, n)), where m and n are the lengths of the symmetric lists.
+-- | \(\mathcal{O}(\min(m, n))\), where m and n are the lengths of the symmetric lists.
 -- Appends two symmetric lists, traversing only the shorter one.
 --
 -- > toList (fromList xs ++ fromList ys) == xs Prelude.++ ys
