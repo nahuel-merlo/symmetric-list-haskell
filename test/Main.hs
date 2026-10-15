@@ -95,7 +95,9 @@ prop_map f seeds = True ==> SL.toList (SL.map (applyFun f) s) == map (applyFun f
 prop_uncons :: [Seed Int] -> Property
 prop_uncons seeds = not (null xs) ==> (y == x && SL.toList sl == ys)
     where 
-        Just (x, sl) = SL.uncons (SL.fromList xs)
+        s  = fromSeeds seeds
+        xs = SL.toList s
+        Just (x, sl) = SL.uncons s
         Just (y, ys) = L.uncons xs
 
 prop_conc :: [Int] -> [Int] -> Property
