@@ -182,6 +182,10 @@ unsnoc (SL lenL _ (xs, [y])) = Just (balance (SL lenL 0 (xs, [])), y)
 unsnoc (SL lenL lenR (xs, y:ys)) = Just (SL lenL (lenR-1) (xs, ys), y)
 unsnoc (SL _ _ ([x], [])) = Just (nil, x)
 
+-- | O(min(m, n)), where m and n are the lengths of the symmetric lists.
+-- Appends two symmetric lists, traversing only the shorter one.
+--
+-- > toList (fromList xs ++ fromList ys) == xs Prelude.++ ys
 (++) :: SymmetricList a -> SymmetricList a -> SymmetricList a
 (++) l@(SL lenL lenR (xs, ys)) r@(SL lenL' lenR' (xs', ys')) 
     | null l = r
