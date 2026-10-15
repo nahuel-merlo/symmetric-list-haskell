@@ -67,8 +67,10 @@ prop_tail seeds = not (null xs) ==> SL.toList (SL.tail s) == L.tail xs
         s  = fromSeeds seeds
         xs = SL.toList s
 
-prop_null :: [Int] -> Property
-prop_null xs = True ==> SL.null (SL.fromList xs) == L.null xs 
+prop_null :: [Seed Int] -> Property
+prop_null seeds = True ==> SL.null s == L.null (SL.toList s)
+    where
+        s = fromSeeds seeds
 
 prop_dropWhile :: Fun Int Bool -> [Int] -> Property
 prop_dropWhile f xs = True ==> SL.toList (SL.dropWhile (applyFun f) (SL.fromList xs)) == L.dropWhile (applyFun f) xs
