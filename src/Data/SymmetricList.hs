@@ -119,6 +119,9 @@ init (SL _ _ ([], [_])) = nil
 init (SL lenL _ (xs, [_])) = balance (SL lenL 0 (xs, []))
 init (SL lenL lenR (xs, _:ys)) =  SL lenL (lenR-1) (xs, ys)
 
+-- | O(n). Removes the longest prefix whose elements satisfy the predicate.
+--
+-- > toList (dropWhile p (fromList xs)) == Prelude.dropWhile p xs
 dropWhile :: (a -> Bool) -> SymmetricList a -> SymmetricList a
 dropWhile _ (SL _ _ ([], [])) = nil
 dropWhile p sl
