@@ -106,10 +106,12 @@ prop_concat seeds seeds' = True ==> SL.toList (s SL.++ s') == SL.toList s L.++ S
         s  = fromSeeds seeds
         s' = fromSeeds seeds'
 
-prop_unsnoc :: [Int] -> Property
-prop_unsnoc xs = not (null xs) ==> (x == y && SL.toList sl == ys) 
+prop_unsnoc :: [Seed Int] -> Property
+prop_unsnoc seeds = not (null xs) ==> (x == y && SL.toList sl == ys) 
     where 
-        Just (sl, x) = SL.unsnoc (SL.fromList xs)
+        s  = fromSeeds seeds
+        xs = SL.toList s
+        Just (sl, x) = SL.unsnoc s
         Just (ys, y) = L.unsnoc xs
 
 prop_singleton :: Int -> Property
