@@ -99,6 +99,10 @@ last (SL _ _ ([], []))    = error "last on empty symmetric list"
 last (SL _ _ (_, (y:_))) = y
 last (SL _ _([x], _))     = x
 
+-- | O(1) amortized, O(n) worst case. Removes the first element of a
+-- non-empty symmetric list. Fails on an empty symmetric list.
+--
+-- > toList (tail (fromList xs)) == Prelude.tail xs
 tail :: SymmetricList a -> SymmetricList a
 tail (SL _ _ ([], []))  = error "tail on empty symmetric list"
 tail (SL _ _([], [_])) = nil
