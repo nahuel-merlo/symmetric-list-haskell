@@ -161,6 +161,10 @@ reverse (SL lenL lenR (xs, ys)) = SL lenR lenL (ys, xs)
 map :: (a -> b) -> SymmetricList a -> SymmetricList b 
 map = fmap
 
+-- | O(1) amortized, O(n) worst case. Splits a symmetric list into its first
+-- element and the rest, or returns 'Nothing' if it is empty.
+--
+-- > fmap (fmap toList) (uncons (fromList xs)) == Data.List.uncons xs
 uncons :: SymmetricList a -> Maybe (a, SymmetricList a) 
 uncons (SL _ _ ([], [])) = Nothing
 uncons (SL _ lenR ([x], ys)) = Just (x, balance (SL 0 lenR ([], ys)))
