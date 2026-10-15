@@ -155,6 +155,9 @@ singleton x = cons x nil
 reverse :: SymmetricList a -> SymmetricList a
 reverse (SL lenL lenR (xs, ys)) = SL lenR lenL (ys, xs)
 
+-- | O(n). Applies a function to every element of a symmetric list.
+--
+-- > toList (map f (fromList xs)) == Prelude.map f xs
 map :: (a -> b) -> SymmetricList a -> SymmetricList b 
 map = fmap
 
