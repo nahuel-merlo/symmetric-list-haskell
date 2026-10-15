@@ -81,6 +81,10 @@ snoc y (SL lenL lenR (xs, ys))
     | Lst.null xs = SL (lenR) 1 (ys, [y])
     | otherwise   = SL (lenL) (lenR+1) (xs, y:ys)
 
+-- | O(1). Returns the first element of a non-empty symmetric list.
+-- Fails on an empty symmetric list.
+--
+-- > head (fromList xs) == Prelude.head xs
 head :: SymmetricList a -> a
 head (SL _ _ ([], []))    = error "head on empty symmetric list"
 head (SL _ _ ((x:_), _)) = x
