@@ -149,6 +149,9 @@ single _            = False
 singleton :: a -> SymmetricList a  
 singleton x = cons x nil
 
+-- | O(1). Reverses a symmetric list by swapping its left and right lists.
+--
+-- > toList (reverse (fromList xs)) == Prelude.reverse xs
 reverse :: SymmetricList a -> SymmetricList a
 reverse (SL lenL lenR (xs, ys)) = SL lenR lenL (ys, xs)
 
