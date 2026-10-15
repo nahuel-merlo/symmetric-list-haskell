@@ -82,8 +82,10 @@ prop_reverse seeds = True ==> SL.toList (SL.reverse s) == L.reverse (SL.toList s
     where
         s = fromSeeds seeds
 
-prop_length :: [Int] -> Property
-prop_length xs = True ==> length (SL.fromList xs) == length xs
+prop_length :: [Seed Int] -> Property
+prop_length seeds = True ==> length (SL.fromList xs) == length xs
+    where
+        xs = SL.toList (fromSeeds seeds)
 
 prop_map :: Fun Int Int -> [Int] -> Property
 prop_map f xs = True ==> SL.toList (SL.map (applyFun f) (SL.fromList xs)) == map (applyFun f) xs
