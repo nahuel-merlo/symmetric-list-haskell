@@ -77,8 +77,10 @@ prop_dropWhile f seeds = True ==> SL.toList (SL.dropWhile (applyFun f) s) == L.d
     where
         s = fromSeeds seeds
 
-prop_reverse :: [Int] -> Property 
-prop_reverse xs = True ==> SL.toList (SL.reverse (SL.fromList xs)) == L.reverse xs
+prop_reverse :: [Seed Int] -> Property 
+prop_reverse seeds = True ==> SL.toList (SL.reverse s) == L.reverse (SL.toList s)
+    where
+        s = fromSeeds seeds
 
 prop_length :: [Int] -> Property
 prop_length xs = True ==> length (SL.fromList xs) == length xs
