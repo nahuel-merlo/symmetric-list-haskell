@@ -61,8 +61,11 @@ prop_last seeds = not (null xs) ==> SL.last s == L.last xs
         s  = fromSeeds seeds
         xs = SL.toList s
 
-prop_tail :: [Int] -> Property
-prop_tail xs = not (null xs) ==> SL.toList (SL.tail (SL.fromList xs)) == L.tail xs
+prop_tail :: [Seed Int] -> Property
+prop_tail seeds = not (null xs) ==> SL.toList (SL.tail s) == L.tail xs
+    where
+        s  = fromSeeds seeds
+        xs = SL.toList s
 
 prop_null :: [Int] -> Property
 prop_null xs = True ==> SL.null (SL.fromList xs) == L.null xs 
