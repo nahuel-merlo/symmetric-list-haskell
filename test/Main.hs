@@ -43,9 +43,11 @@ prop_cons x seeds =
     where
         s = fromSeeds seeds
 
-prop_snoc :: Int -> [Int] -> Property
-prop_snoc x xs = 
-    True ==> SL.toList (SL.snoc x (SL.fromList xs)) == xs ++ [x]
+prop_snoc :: Int -> [Seed Int] -> Property
+prop_snoc x seeds = 
+    True ==> SL.toList (SL.snoc x s) == SL.toList s ++ [x]
+    where
+        s = fromSeeds seeds
 
 prop_head :: [Int] -> Property
 prop_head xs = not (null xs) ==> SL.head (SL.fromList xs) == L.head xs
