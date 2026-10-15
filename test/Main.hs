@@ -49,8 +49,11 @@ prop_snoc x seeds =
     where
         s = fromSeeds seeds
 
-prop_head :: [Int] -> Property
-prop_head xs = not (null xs) ==> SL.head (SL.fromList xs) == L.head xs
+prop_head :: [Seed Int] -> Property
+prop_head seeds = not (null xs) ==> SL.head s == L.head xs
+    where
+        s  = fromSeeds seeds
+        xs = SL.toList s
 
 prop_last :: [Int] -> Property
 prop_last xs = not (null xs) ==> SL.last (SL.fromList xs) == L.last xs
