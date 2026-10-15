@@ -6,16 +6,21 @@ import qualified Data.SymmetricList as SL
 import qualified Data.List as L
 import Control.Exception (evaluate)
 
-data Seed a = Cons a | Snoc a | Reverse deriving (Show)
+data Seed a = Cons a | Snoc a | Reverse | Uncons | Unsnoc | Tail  deriving (Show)
 
 instance Arbitrary a => Arbitrary (Seed a) where
-    arbitrary = frequency [(3, Cons <$> arbitrary), (3, Snoc <$> arbitrary), (2, pure Reverse)]
+    arbitrary = frequency [(3, Cons <$> arbitrary), (3, Snoc <$> arbitrary), (2, pure Reverse), (1, pure Unsnoc), (1, pure Uncons), (1, pure Tail)]
 
 apply :: SL.SymmetricList a -> Seed a -> SL.SymmetricList a 
 apply s (Cons x) = SL.cons x s
 apply s (Snoc x) = SL.snoc x s
 apply s Reverse = SL.reverse s
-
+apply s Unsnoc = maybe s fst (SL.unsnoc s)
+apply s Uncons = maybe s snd (SL.uncons s)
+apply s (Tail) 
+    | null s = s
+    | otherwise = SL.tail s 
+    
 instance Arbitrary a => Arbitrary (SL.SymmetricList a) where
     arbitrary = foldl apply SL.nil <$> listOf arbitrary 
     shrink s = SL.fromList <$> shrink (SL.toList s)
