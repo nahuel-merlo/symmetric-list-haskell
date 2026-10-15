@@ -135,6 +135,9 @@ null :: SymmetricList a -> Bool
 null (SL _ _ ([], [])) = True
 null _           = False
 
+-- | O(1). Checks whether a symmetric list has exactly one element.
+--
+-- > single (fromList xs) == (length xs == 1)
 single :: SymmetricList a -> Bool
 single (SL _ _ ([_], [])) = True
 single (SL _ _ ([], [_])) = True
