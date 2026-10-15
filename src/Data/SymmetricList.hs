@@ -123,11 +123,13 @@ map = fmap
 
 uncons :: SymmetricList a -> Maybe (a, SymmetricList a) 
 uncons (SL _ _ ([], [])) = Nothing
+uncons (SL _ lenR ([x], ys)) = Just (x, balance (SL 0 lenR ([], ys)))
 uncons (SL lenL lenR (x:xs, ys)) = Just (x, SL (lenL-1) lenR (xs,ys))
 uncons (SL _ _ ([], [y])) = Just (y, nil)
 
 unsnoc :: SymmetricList a -> Maybe (SymmetricList a, a)
 unsnoc (SL _ _ ([], [])) = Nothing 
+unsnoc (SL lenL _ (xs, [y])) = Just (balance (SL lenL 0 (xs, [])), y)
 unsnoc (SL lenL lenR (xs, y:ys)) = Just (SL lenL (lenR-1) (xs, ys), y)
 unsnoc (SL _ _ ([x], [])) = Just (nil, x)
 
