@@ -109,6 +109,10 @@ tail (SL _ _([], [_])) = nil
 tail (SL _ lenR ([_], ys)) = balance (SL 0 lenR ([], ys))
 tail (SL lenL lenR (_:xs, ys)) = SL (lenL-1) lenR (xs, ys)    
 
+-- | O(1) amortized, O(n) worst case. Removes the last element of a
+-- non-empty symmetric list. Fails on an empty symmetric list.
+--
+-- > toList (init (fromList xs)) == Prelude.init xs
 init :: SymmetricList a -> SymmetricList a
 init (SL _ _ ([], [])) = error "init on empty symmetric list"
 init (SL _ _ ([], [_])) = nil
