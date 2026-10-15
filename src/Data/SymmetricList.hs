@@ -48,6 +48,9 @@ fromList l = SL lenL lenR (xs, Lst.reverse ys)
 toList :: SymmetricList a -> [a]
 toList (SL _ _ (xs, ys)) = xs Lst.++ Lst.reverse ys
 
+-- | O(n). Splits the elements evenly between the left and right lists
+--
+-- > toList (balance sl) == toList sl
 balance :: SymmetricList a -> SymmetricList a
 balance (SL lenL lenR (xs, ys)) = (SL newLenL newLenR (us, Lst.reverse vs))
     where 
