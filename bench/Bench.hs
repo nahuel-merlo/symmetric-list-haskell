@@ -13,6 +13,11 @@ main = defaultMain
             , bcompare (baseline n "last") $
               bench "list" $ whnf last xs
             ]
+            , bgroup "reverse" 
+            [ bench "symmetricList" $ whnf SL.reverse sl
+            , bcompare (baseline n "reverse") $ 
+              bench "list" $ whnf reverse xs
+            ]
         ]
   | n <- [1000, 10000, 100000]
   ]
