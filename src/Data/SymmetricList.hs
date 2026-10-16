@@ -246,6 +246,13 @@ instance Ord a => Ord (SymmetricList a) where
 instance Functor SymmetricList where
     fmap f (SL lenL lenR (xs, ys)) = SL lenL lenR ([f x | x <- xs], [f y | y <- ys]) 
 
+-- | Folds over the elements from front to back.
+--
+-- 'length' is \(\mathcal{O}(1)\), since the lengths of both lists are stored.
+--
+-- __Faster than lists:__ 'Prelude.length' from "Prelude" is \(\mathcal{O}(n)\).
+--
+-- > length (fromList xs) == Prelude.length xs
 instance Foldable SymmetricList where
     foldr f i (SL _ _ (xs, ys)) = foldr f (foldr f i (Lst.reverse ys)) xs
     length (SL lenL lenR _) = lenL + lenR
