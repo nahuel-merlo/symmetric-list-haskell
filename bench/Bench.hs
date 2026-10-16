@@ -18,6 +18,11 @@ main = defaultMain
             , bcompare (baseline n "reverse") $ 
               bench "list" $ whnf reverse xs
             ]
+            , bgroup "snoc"
+            [ bench "symmetricList" $ whnf (uncurry SL.snoc) (n, sl)
+            , bcompare (baseline n "snoc") $
+              bench "list" $ nf (uncurry (++)) (xs, [n])
+            ]
         ]
   | n <- [1000, 10000, 100000]
   ]
