@@ -235,13 +235,18 @@ unsnoc (SL _ _ ([x], [])) = Just (nil, x)
 {-- Instances --}
 
 instance Show a => Show (SymmetricList a) where
-    show (SL _ _ l) = show l
-    -- show sl = show $ toList sl 
+    -- show (SL _ _ l) = show l
+    show sl = show $ toList sl 
     -- show (SL len (xs, ys)) = ("<- ") ++ (show xs) ++ (" | ") ++ (show $ reverse ys) ++ (" ->") 
 
 instance Eq a => Eq (SymmetricList a) where
-    (==) (SL _ _ (l, r)) (SL _ _ (l', r')) = l == l' && r == r'
-    
+    (==) sl@(SL lenL lenR (xs, ys)) sl'@(SL lenL' lenR' (xs', ys'))
+        | lenL + lenR /= lenL' + lenR' = False
+        | lenL > lenL' = sl' == sl
+        | Just mid' <- Lst.stripPrefix xs xs'
+        , Just mid  <- Lst.stripPrefix ys' ys = Lst.reverse mid == mid'
+        | otherwise = False
+
 instance Ord a => Ord (SymmetricList a) where
     (<=) (SL _ _ (l, r)) (SL _ _ (l', r')) = l <= l' && Lst.reverse r <= Lst.reverse r'
 
