@@ -72,7 +72,9 @@ library
     -- other-extensions:
 
     -- Other library packages from which modules are imported.
-    build-depends:    base >=4.19
+    build-depends:    
+        base >=4.19,
+        deepseq
 
     -- Directories containing source files.
     hs-source-dirs:   src
@@ -108,3 +110,16 @@ test-suite symmetric-list-test
         symmetric-list,
         hspec,
         QuickCheck
+
+benchmark symmetric-list-bench
+    import:           warnings
+    default-language: Haskell2010
+    type:             exitcode-stdio-1.0
+    hs-source-dirs:   bench
+    main-is:          Bench.hs
+    ghc-options:      -O2 -rtsopts -with-rtsopts=-A32m
+    build-depends:
+        base >=4.19,
+        symmetric-list,
+        tasty-bench,
+        deepseq
