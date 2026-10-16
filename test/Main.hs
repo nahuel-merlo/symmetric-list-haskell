@@ -115,7 +115,7 @@ prop_unsnoc seeds = not (null xs) ==> (x == y && SL.toList sl == ys)
         Just (ys, y) = L.unsnoc xs
 
 prop_singleton :: Int -> Property
-prop_singleton x = True ==> (SL.toList . SL.singleton) x == L.singleton x 
+prop_singleton x = True ==> (SL.toList . SL.singleton) x == L.singleton x
 
 prop_eq :: [Seed Bool] -> [Seed Bool] -> Property
 prop_eq seeds seeds' = (s == s') === (SL.toList s == SL.toList s')
@@ -127,6 +127,12 @@ prop_eq_representation :: [Seed Int] -> Property
 prop_eq_representation seeds = s === SL.fromList (SL.toList s)
     where
         s = fromSeeds seeds
+
+prop_compare :: [Seed Bool] -> [Seed Bool] -> Property
+prop_compare seeds seeds' = compare s s' === compare (SL.toList s) (SL.toList s')
+    where
+        s  = fromSeeds seeds
+        s' = fromSeeds seeds'
 
 main :: IO ()
 main = hspec $ do
@@ -246,3 +252,7 @@ main = hspec $ do
 
         it "considers equal lists with the same elements split differently" $ do
             SL.snoc 3 (SL.fromList [1, 2]) `shouldBe` SL.cons 1 (SL.fromList [2, 3 :: Int])
+
+    describe "compare" $ do
+        it "behaves like compare on the represented lists" $ do
+            property prop_compare

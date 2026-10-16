@@ -248,7 +248,10 @@ instance Eq a => Eq (SymmetricList a) where
         | otherwise = False
 
 instance Ord a => Ord (SymmetricList a) where
-    (<=) (SL _ _ (l, r)) (SL _ _ (l', r')) = l <= l' && Lst.reverse r <= Lst.reverse r'
+    compare (SL _ _ (xs, ys)) (SL _ _ (xs', ys')) = go xs xs'
+        where
+            go (a:as) (b:bs) = compare a b <> go as bs
+            go as     bs     = compare (as Lst.++ Lst.reverse ys) (bs Lst.++ Lst.reverse ys')
 
 instance Functor SymmetricList where
     fmap f (SL lenL lenR (xs, ys)) = SL lenL lenR ([f x | x <- xs], [f y | y <- ys]) 
