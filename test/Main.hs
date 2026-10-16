@@ -117,6 +117,17 @@ prop_unsnoc seeds = not (null xs) ==> (x == y && SL.toList sl == ys)
 prop_singleton :: Int -> Property
 prop_singleton x = True ==> (SL.toList . SL.singleton) x == L.singleton x 
 
+prop_eq :: [Seed Bool] -> [Seed Bool] -> Property
+prop_eq seeds seeds' = (s == s') === (SL.toList s == SL.toList s')
+    where
+        s  = fromSeeds seeds
+        s' = fromSeeds seeds'
+
+prop_eq_representation :: [Seed Int] -> Property
+prop_eq_representation seeds = s === SL.fromList (SL.toList s)
+    where
+        s = fromSeeds seeds
+
 main :: IO ()
 main = hspec $ do
     describe "fromList" $ do
@@ -225,3 +236,13 @@ main = hspec $ do
     describe "singleton" $ do
         it "behaves like singleton on lists" $ do
             property prop_singleton
+
+    describe "(==)" $ do
+        it "behaves like (==) on the represented lists" $ do
+            property prop_eq
+
+        it "ignores the internal representation" $ do
+            property prop_eq_representation
+
+        it "considers equal lists with the same elements split differently" $ do
+            SL.snoc 3 (SL.fromList [1, 2]) `shouldBe` SL.cons 1 (SL.fromList [2, 3 :: Int])
