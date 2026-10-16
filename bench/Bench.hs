@@ -28,6 +28,11 @@ main = defaultMain
             , bcompare (baseline n "init") $ 
               bench "list" $ nf init xs
             ]
+            , bgroup "unsnoc"
+              [ bench "symmetricList" $ whnf SL.unsnoc sl
+              , bcompare (baseline n "unsnoc") $
+                bench "list" $ nf L.unsnoc xs
+              ]
         ]
   | n <- [1000, 10000, 100000]
   ]
