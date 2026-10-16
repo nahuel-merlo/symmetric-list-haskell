@@ -7,6 +7,7 @@ module Data.SymmetricList (
     snoc,
     head,
     last,
+    init,
     tail,
     dropWhile,
     null,
@@ -21,6 +22,7 @@ module Data.SymmetricList (
 
 import Prelude hiding (head, tail, last, dropWhile, init, null, reverse, map, filter, (++))
 import qualified Data.List as Lst
+import Control.DeepSeq
 
 {-- 
     SymmetricList (xs, ys) = xs ++ reverse ys
@@ -256,3 +258,6 @@ instance Functor SymmetricList where
 instance Foldable SymmetricList where
     foldr f i (SL _ _ (xs, ys)) = foldr f (foldr f i (Lst.reverse ys)) xs
     length (SL lenL lenR _) = lenL + lenR
+
+instance NFData a => NFData (SymmetricList a) where 
+    rnf (SL _ _ (l, r)) = rnf l `seq` rnf r
