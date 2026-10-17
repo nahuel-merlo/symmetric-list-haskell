@@ -216,3 +216,9 @@ cabal bench symmetric-list-bench
 # export results
 cabal bench symmetric-list-bench --benchmark-options='--csv bench.csv --svg bench.svg'
 ```
+
+## References
+
+- Richard Bird and Jeremy Gibbons. *Algorithm Design with Haskell*.
+  Cambridge University Press, 2020. The implementation follows the
+  presentation of symmetric lists in this book.
