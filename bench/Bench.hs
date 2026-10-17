@@ -1,36 +1,37 @@
 module Main (main) where
 
 import Test.Tasty.Bench
-import qualified Data.SymmetricList as SL
+import Data.SymmetricList (SymmetricList)
+import qualified Data.SymmetricList as SymmetricList
 import qualified Data.List as L
 
 -- balanced symmetric list benchmark
 main :: IO ()
 main = defaultMain
-  [ env (pure (SL.fromList [1 .. n :: Int], [1 .. n :: Int])) $ \ ~(sl, xs) ->
+  [ env (pure (SymmetricList.fromList [1 .. n :: Int], [1 .. n :: Int])) $ \ ~(sl, xs) ->
       bgroup ("n=" ++ show n) 
         [ bgroup "last"
-            [ bench "symmetricList" $ whnf SL.last sl
+            [ bench "symmetricList" $ whnf SymmetricList.last sl
             , bcompare (baseline n "last") $
               bench "list" $ whnf last xs
             ]
             , bgroup "reverse" 
-            [ bench "symmetricList" $ whnf SL.reverse sl
+            [ bench "symmetricList" $ whnf SymmetricList.reverse sl
             , bcompare (baseline n "reverse") $ 
               bench "list" $ whnf reverse xs
             ]
             , bgroup "snoc"
-            [ bench "symmetricList" $ whnf (uncurry SL.snoc) (n, sl)
+            [ bench "symmetricList" $ whnf (uncurry SymmetricList.snoc) (n, sl)
             , bcompare (baseline n "snoc") $
               bench "list" $ nf (uncurry (++)) (xs, [n])
             ]
             , bgroup "init"
-            [ bench "symmetricList" $ whnf SL.init sl
+            [ bench "symmetricList" $ whnf SymmetricList.init sl
             , bcompare (baseline n "init") $ 
               bench "list" $ nf init xs
             ]
             , bgroup "unsnoc"
-            [ bench "symmetricList" $ whnf SL.unsnoc sl
+            [ bench "symmetricList" $ whnf SymmetricList.unsnoc sl
             , bcompare (baseline n "unsnoc") $
               bench "list" $ nf L.unsnoc xs
             ]
@@ -53,10 +54,10 @@ baseline :: Int -> String -> String
 baseline n node = ("$NF == \"symmetricList\" && $(NF-1) == \"" ++ node ++ "\" && $(NF-2) == \"n="++ show n ++"\"")
 
 -- | Removes every element from the back, summing them.
-drainSL :: SL.SymmetricList Int -> Int
+drainSL :: SymmetricList Int -> Int
 drainSL = go 0
   where
-    go acc s = acc `seq` case SL.unsnoc s of
+    go acc s = acc `seq` case SymmetricList.unsnoc s of
       Nothing      -> acc
       Just (s', y) -> go (acc + y) s'
 

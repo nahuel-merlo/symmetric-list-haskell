@@ -1,5 +1,30 @@
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 
+{-|
+Module      : Data.SymmetricList
+Description : Lists with efficient access to both ends
+
+A symmetric list stores its elements split between a front list and a
+reversed back list, giving \(\mathcal{O}(1)\) access to both ends.
+
+= Importing
+
+This module is designed to be imported qualified: many of its names
+('head', 'tail', 'reverse', 'map', ...) clash with "Prelude" and "Data.List".
+The standard import is the type unqualified and everything else qualified
+as @SymmetricList@:
+
+> import Data.SymmetricList (SymmetricList)
+> import qualified Data.SymmetricList as SymmetricList
+>
+> xs :: SymmetricList Int
+> xs = SymmetricList.snoc 3 (SymmetricList.fromList [1, 2])
+
+Appending is also available unqualified through the 'Semigroup' instance:
+
+> SymmetricList.append xs ys == xs <> ys
+-}
+
 module Data.SymmetricList (
     SymmetricList,
     fromList,
