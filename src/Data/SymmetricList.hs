@@ -17,12 +17,12 @@ module Data.SymmetricList (
     singleton,
     reverse,
     map,
-    (++),
+    append,
     uncons,
     unsnoc,
 ) where
 
-import Prelude hiding (head, tail, last, dropWhile, init, null, reverse, map, filter, (++))
+import Prelude hiding (head, tail, last, dropWhile, init, null, reverse, map, filter)
 import qualified Data.List as Lst
 import Data.SymmetricList.Internal
 
@@ -193,19 +193,3 @@ unsnoc (SL _ _ ([], [])) = Nothing
 unsnoc (SL lenL _ (xs, [y])) = Just (balance (SL lenL 0 (xs, [])), y)
 unsnoc (SL lenL lenR (xs, y:ys)) = Just (SL lenL (lenR-1) (xs, ys), y)
 unsnoc (SL _ _ ([x], [])) = Just (nil, x)
-
--- | \(\mathcal{O}(\min(m, n))\), where m and n are the lengths of the symmetric lists.
--- Appends two symmetric lists, traversing only the shorter one.
---
--- __Faster than lists:__ '(Prelude.++)' from "Prelude" is \(\mathcal{O}(m)\), since it traverses the whole first list.
---
--- > toList (fromList xs ++ fromList ys) == xs Prelude.++ ys
-(++) :: SymmetricList a -> SymmetricList a -> SymmetricList a
-(++) l@(SL lenL lenR (xs, ys)) r@(SL lenL' lenR' (xs', ys')) 
-    | null l = r
-    | null r = l
-    | single l && single r = SL 1 1 (xs Lst.++ ys, ys' Lst.++ xs')
-    | single l = SL (1+lenL') lenR'  (xs Lst.++ (ys Lst.++ xs'), ys')
-    | single r = SL lenL (lenR+1) (xs, (ys' Lst.++ xs') Lst.++ ys)
-    | length l <= length r = SL (lenL + lenR + lenL') lenR' (xs Lst.++ (ys `revAppend` xs'), ys')
-    | otherwise = SL lenL (lenR' + lenL' + lenR) (xs, ys' Lst.++ (xs' `revAppend` ys))

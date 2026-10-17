@@ -100,8 +100,8 @@ prop_uncons seeds = not (null xs) ==> (y == x && SL.toList sl == ys)
         Just (x, sl) = SL.uncons s
         Just (y, ys) = L.uncons xs
 
-prop_concat :: [Seed Int] -> [Seed Int] -> Property
-prop_concat seeds seeds' = True ==> SL.toList (s SL.++ s') == SL.toList s L.++ SL.toList s'
+prop_append :: [Seed Int] -> [Seed Int] -> Property
+prop_append seeds seeds' = True ==> SL.toList (SL.append s s') == SL.toList s L.++ SL.toList s'
     where
         s  = fromSeeds seeds
         s' = fromSeeds seeds'
@@ -235,9 +235,10 @@ main = hspec $ do
         it "give Nothing when the list is empty" $ do
             SL.unsnoc (SL.fromList ([]:: [Int])) `shouldBe` Nothing
 
-    describe "(++)" $ do
+    describe "append" $ do
         it "behaves like (++) on lists" $ do
-            property prop_concat
+            property prop_append
+
 
     describe "singleton" $ do
         it "behaves like singleton on lists" $ do

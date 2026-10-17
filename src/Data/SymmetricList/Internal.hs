@@ -2,6 +2,7 @@ module Data.SymmetricList.Internal (
     SymmetricList(..),
     balance,
     revAppend,
+    append,
 ) where
 
 import qualified Data.List as Lst
@@ -34,6 +35,25 @@ revAppend :: [a] -> [a] -> [a]
 revAppend []     acc = acc
 revAppend (z:zs) acc = revAppend zs (z:acc)
 
+-- | \(\mathcal{O}(\min(m, n))\), where m and n are the lengths of the symmetric lists.
+-- Appends two symmetric lists, traversing only the shorter one.
+--
+-- __Faster than lists:__ '(Prelude.++)' from "Prelude" is \(\mathcal{O}(m)\), since it traverses the whole first list.
+--
+-- > toList (append (fromList xs) (fromList ys)) == xs Prelude.++ ys
+append :: SymmetricList a -> SymmetricList a -> SymmetricList a
+append l@(SL lenL lenR (xs, ys)) r@(SL lenL' lenR' (xs', ys'))
+    | len == 0 = r
+    | len' == 0 = l
+    | len == 1 && len' == 1 = SL 1 1 (xs Lst.++ ys, ys' Lst.++ xs')
+    | len == 1 = SL (1+lenL') lenR' (xs Lst.++ (ys Lst.++ xs'), ys')
+    | len' == 1 = SL lenL (lenR+1) (xs, (ys' Lst.++ xs') Lst.++ ys)
+    | len <= len' = SL (lenL + lenR + lenL') lenR' (xs Lst.++ (ys `revAppend` xs'), ys')
+    | otherwise = SL lenL (lenR' + lenL' + lenR) (xs, ys' Lst.++ (xs' `revAppend` ys))
+    where
+        len = lenL + lenR
+        len' = lenL' + lenR'
+
 {-- Instances --}
 
 instance Show a => Show (SymmetricList a) where
@@ -54,6 +74,12 @@ instance Ord a => Ord (SymmetricList a) where
         where
             go (a:as) (b:bs) = compare a b <> go as bs
             go as     bs     = compare (as Lst.++ Lst.reverse ys) (bs Lst.++ Lst.reverse ys')
+
+-- | '(<>)' is 'append'.
+--
+-- > toList (fromList xs <> fromList ys) == xs Prelude.++ ys
+instance Semigroup (SymmetricList a) where
+    (<>) = append
 
 instance Functor SymmetricList where
     fmap f (SL lenL lenR (xs, ys)) = SL lenL lenR ([f x | x <- xs], [f y | y <- ys])
