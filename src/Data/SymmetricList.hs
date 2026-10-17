@@ -138,6 +138,7 @@ tail (SL lenL lenR (_:xs, ys)) = SL (lenL-1) lenR (xs, ys)
 -- > toList (init (fromList xs)) == Prelude.init xs
 init :: SymmetricList a -> SymmetricList a
 init (SL _ _ ([], [])) = error "init on empty symmetric list"
+init (SL _ _ ([_], [])) = nil
 init (SL _ _ ([], [_])) = nil
 init (SL lenL _ (xs, [_])) = balance (SL lenL 0 (xs, []))
 init (SL lenL lenR (xs, _:ys)) =  SL lenL (lenR-1) (xs, ys)
