@@ -106,6 +106,19 @@ prop_append seeds seeds' = True ==> SL.toList (SL.append s s') == SL.toList s L.
         s  = fromSeeds seeds
         s' = fromSeeds seeds'
 
+prop_semigroup :: [Seed Int] -> [Seed Int] -> Property
+prop_semigroup seeds seeds' = True ==> s <> s' == SL.append s s'
+    where
+        s  = fromSeeds seeds
+        s' = fromSeeds seeds'
+
+prop_semigroup_assoc :: [Seed Int] -> [Seed Int] -> [Seed Int] -> Property
+prop_semigroup_assoc seeds seeds' seeds'' = True ==> (s <> s') <> s'' == s <> (s' <> s'')
+    where
+        s   = fromSeeds seeds
+        s'  = fromSeeds seeds'
+        s'' = fromSeeds seeds''
+
 prop_unsnoc :: [Seed Int] -> Property
 prop_unsnoc seeds = not (null xs) ==> (x == y && SL.toList sl == ys) 
     where 
@@ -238,6 +251,13 @@ main = hspec $ do
     describe "append" $ do
         it "behaves like (++) on lists" $ do
             property prop_append
+
+    describe "(<>)" $ do
+        it "behaves like append" $ do
+            property prop_semigroup
+
+        it "is associative" $ do
+            property prop_semigroup_assoc
 
 
     describe "singleton" $ do
