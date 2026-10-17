@@ -7,10 +7,10 @@ import qualified Data.SymmetricList as SymmetricList
 import qualified Data.List as L
 import Control.Exception (evaluate)
 
-data Seed a = Cons a | Snoc a | Reverse | Uncons | Unsnoc | Tail  deriving (Show)
+data Seed a = Cons a | Snoc a | Reverse | Uncons | Unsnoc | Tail | Init  deriving (Show)
 
 instance Arbitrary a => Arbitrary (Seed a) where
-    arbitrary = frequency [(3, Cons <$> arbitrary), (3, Snoc <$> arbitrary), (2, pure Reverse), (1, pure Unsnoc), (1, pure Uncons), (1, pure Tail)]
+    arbitrary = frequency [(3, Cons <$> arbitrary), (3, Snoc <$> arbitrary), (2, pure Reverse), (1, pure Unsnoc), (1, pure Uncons), (1, pure Tail), (1, pure Init)]
 
 apply :: SymmetricList a -> Seed a -> SymmetricList a 
 apply s (Cons x) = SymmetricList.cons x s
@@ -21,6 +21,9 @@ apply s Uncons = maybe s snd (SymmetricList.uncons s)
 apply s (Tail) 
     | null s = s
     | otherwise = SymmetricList.tail s 
+apply s Init
+    | null s = s
+    | otherwise = SymmetricList.init s
     
 instance Arbitrary a => Arbitrary (SymmetricList a) where
     arbitrary = foldl apply SymmetricList.nil <$> listOf arbitrary 
@@ -67,6 +70,22 @@ prop_tail seeds = not (null xs) ==> SymmetricList.toList (SymmetricList.tail s) 
     where
         s  = fromSeeds seeds
         xs = SymmetricList.toList s
+
+prop_init :: [Seed Int] -> Property
+prop_init seeds = not (null xs) ==> SymmetricList.toList (SymmetricList.init s) == L.init xs
+    where
+        s  = fromSeeds seeds
+        xs = SymmetricList.toList s
+
+prop_init_length :: [Seed Int] -> Property
+prop_init_length seeds = not (null s) ==> length (SymmetricList.init s) === length s - 1
+    where
+        s = fromSeeds seeds
+
+prop_init_snoc :: Int -> [Seed Int] -> Property
+prop_init_snoc x seeds = SymmetricList.init (SymmetricList.snoc x s) === s
+    where
+        s = fromSeeds seeds
 
 prop_null :: [Seed Int] -> Property
 prop_null seeds = True ==> SymmetricList.null s == L.null (SymmetricList.toList s)
@@ -202,6 +221,28 @@ main = hspec $ do
 
         it "give the tail of the list" $ do
             property prop_tail
+
+    describe "init" $ do
+        it "throws an error when the list is empty" $ do
+            evaluate (SymmetricList.init SymmetricList.nil) `shouldThrow` anyErrorCall
+
+        it "give nil when we just added from the front" $ do
+            SymmetricList.toList (SymmetricList.init (SymmetricList.cons 1 SymmetricList.nil)) `shouldBe` []
+
+        it "give nil when we just added from the back" $ do
+            SymmetricList.toList (SymmetricList.init (SymmetricList.snoc 1 SymmetricList.nil)) `shouldBe` []
+
+        it "give nil on a singleton built with fromList" $ do
+            SymmetricList.toList (SymmetricList.init (SymmetricList.fromList [1])) `shouldBe` []
+
+        it "behaves like init on lists" $ do
+            property prop_init
+
+        it "decreases the length by one" $ do
+            property prop_init_length
+
+        it "undoes snoc" $ do
+            property prop_init_snoc
 
     describe "null" $ do
         it "behaves like null on lists" $ do
