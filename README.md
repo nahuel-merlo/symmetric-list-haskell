@@ -1,6 +1,6 @@
 # symmetric-list
 
-## Motivation / Goal
+## Motivation
 
 Haskell lists (`[a]`) are singly linked: operating on the **front** is cheap,
 but any operation on the **end** forces a traversal of the whole list.
@@ -18,6 +18,32 @@ operations while keeping an interface similar to that of `Data.List`.
 | `reverse`             | $O(n)$       | $O(1)$                   |
 | `length`              | $O(n)$       | $O(1)$                   |
 | `append` (`<>`)       | $O(m)$       | $O(\min(m, n))$          |
+
+### How does it compare?
+
+| | symmetric-list | deque | Data.Sequence |
+| --- | --- | --- | --- |
+| Mixed use of both ends | O(1) amortized | O(n) per operation | O(1) amortized |
+| `head` / `last` | O(1) worst case | O(n) if its side is empty | O(1) |
+| `length` | O(1) | O(n) | O(1) |
+| `reverse` | O(1) | O(1) | O(n) |
+| Indexing / splitting | — | O(n) | O(log n) |
+
+Use `Data.Sequence` if you need random access or splitting, `deque` for a
+queue consumed from one end, and `symmetric-list` when you work on both ends
+and want the `Data.List` API.
+
+### Beyond efficiency: correctness
+
+This library does not only propose an efficient data structure (there are
+already several implementations of double-ended lists, such as `Data.Sequence`
+in `containers`). It also aims to **study its correctness**.
+
+Currently, every operation is checked with property-based testing
+([QuickCheck](https://hackage.haskell.org/package/QuickCheck)) against its
+`Data.List` counterpart. The next step is to add formal verification with
+[Liquid Haskell](https://ucsd-progsys.github.io/liquidhaskell/), proving that
+every operation preserves the representation [invariants](#invariant).
 
 ### Usage
 
