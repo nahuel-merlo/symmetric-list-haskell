@@ -248,3 +248,5 @@ cabal bench symmetric-list-bench --benchmark-options='--csv bench.csv --svg benc
 - Richard Bird and Jeremy Gibbons. *Algorithm Design with Haskell*.
   Cambridge University Press, 2020. The implementation follows the
   presentation of symmetric lists in this book.
+- Chris Okasaki. *Purely Functional Data Structures*. Cambridge University
+  Press, 1998. The canonical reference for this structure.
