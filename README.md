@@ -72,30 +72,30 @@ unqualified.
 
 We start from a list $l$ and split it into two parts:
 
-```math
+$$
 l = xs \mathbin{+\!\!+} ys
 \qquad\text{for example}\qquad
 [1,2,3,4,5,6] = [1,2,3] \mathbin{+\!\!+} [4,5,6]
-```
+$$
 
-```math
+$$
 ys' = \mathrm{reverse}\ ys
 \quad\Longrightarrow\quad
 ys = \mathrm{reverse}\ ys'
 \quad\Longrightarrow\quad
 l = xs \mathbin{+\!\!+} \mathrm{reverse}\ ys'
-```
+$$
 
-```math
+$$
 \langle xs,\ ys \rangle \;\equiv\; xs \mathbin{+\!\!+} \mathrm{reverse}\ ys
-```
+$$
 
 If $xs = [x_1, \dots, x_k]$ and $ys = [y_1, \dots, y_m]$, the represented list
 is:
 
-```math
+$$
 [\;\underbrace{x_1,\ x_2,\ \dots,\ x_k}_{xs}\;,\;\underbrace{y_m,\ \dots,\ y_2,\ y_1}_{\mathrm{reverse}\ ys}\;]
-```
+$$
 
 This way the **first** element is at the head of $xs$ ($x_1$) and the **last**
 one at the head of $ys$ ($y_1$): both ends are one step away.
@@ -114,11 +114,11 @@ traversing the lists to measure them.
 
 If one of the two lists is empty, the other has at most one element:
 
-```math
+$$
 \mathrm{null}\ xs \Rightarrow |ys| \le 1
 \qquad\qquad
 \mathrm{null}\ ys \Rightarrow |xs| \le 1
-```
+$$
 
 This guarantees that `head` and `last` always find their element in $O(1)$.
 
@@ -126,52 +126,52 @@ This guarantees that `head` and `last` always find their element in $O(1)$.
 
 Adding to the end means adding to the head of $ys$:
 
-```math
+$$
 \mathrm{snoc}\ z\ \langle xs,\ ys \rangle = \langle xs,\ z : ys \rangle
-```
+$$
 
 If $xs$ is empty, by the invariant $ys$ has at most one element, which
 becomes the left side: $\mathrm{snoc}\ z\ \langle [\,],\ ys \rangle = \langle ys,\ [z] \rangle$.
 
 Example, starting from `fromList [1..6]` (which splits the elements in half):
 
-```math
+$$
 \begin{array}{lcl}
 \mathrm{fromList}\ [1,2,3,4,5,6] & = & \langle [1,2,3],\ [6,5,4] \rangle \\
 \mathrm{snoc}\ 7\ \langle [1,2,3],\ [6,5,4] \rangle & = & \langle [1,2,3],\ [7,6,5,4] \rangle
 \end{array}
-```
+$$
 
 ### Removing from the end: `init` / `unsnoc`
 
 Removing the last element means removing the head of $ys$:
 
-```math
+$$
 \mathrm{unsnoc}\ \langle xs,\ y : ys \rangle = (\langle xs,\ ys \rangle,\ y) \qquad \text{if } ys \neq [\,]
-```
+$$
 
 The interesting case is when $ys$ has a single element: removing it would
 leave it empty and break the invariant. In that case the list is
 **rebalanced**, splitting the remaining elements in half between both sides:
 
-```math
+$$
 \mathrm{unsnoc}\ \langle xs,\ [y] \rangle = (\mathrm{balance}\ \langle xs,\ [\,] \rangle,\ y)
-```
+$$
 
-```math
+$$
 \mathrm{balance}\ \langle xs,\ ys \rangle = \langle\, \mathrm{take}\ \lfloor n/2 \rfloor\ l,\ \ \mathrm{reverse}\,(\mathrm{drop}\ \lfloor n/2 \rfloor\ l) \,\rangle
 \quad \text{where } l = xs \mathbin{+\!\!+} \mathrm{reverse}\ ys,\ \ n = |l|
-```
+$$
 
 Example:
 
-```math
+$$
 \begin{array}{lcl}
 \mathrm{unsnoc}\ \langle [1,2,3],\ [6,5,4] \rangle & = & (\langle [1,2,3],\ [5,4] \rangle,\ 6) \\
 \mathrm{unsnoc}\ \langle [1,2,3],\ [5,4] \rangle   & = & (\langle [1,2,3],\ [4] \rangle,\ 5) \\
 \mathrm{unsnoc}\ \langle [1,2,3],\ [4] \rangle     & = & (\mathrm{balance}\ \langle [1,2,3],\ [\,] \rangle,\ 4) = (\langle [1],\ [3,2] \rangle,\ 4)
 \end{array}
-```
+$$
 
 `cons`, `tail` and `uncons` are symmetric: they operate on $xs$ and rebalance
 when $xs$ becomes empty. `reverse` simply swaps the sides:
@@ -183,9 +183,9 @@ $\mathrm{reverse}\ \langle xs,\ ys \rangle = \langle ys,\ xs \rangle$.
 and it leaves both sides with half of the elements. Taking as potential
 function
 
-```math
+$$
 \Phi(\langle xs,\ ys \rangle) = \big|\, |xs| - |ys| \,\big|
-```
+$$
 
 each cheap operation changes $\Phi$ by at most $1$, and a rebalance of cost
 $n$ happens when $\Phi \approx n$ and brings it down to $\Phi \le 1$. The cost
