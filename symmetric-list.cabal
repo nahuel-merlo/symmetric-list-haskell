@@ -6,18 +6,18 @@ description:
     A symmetric list stores its elements split between a front list and a
     reversed back list, giving amortized \(\mathcal{O}(1)\) access to both
     ends of the sequence.
-    .
+    
     Compared to ordinary Haskell lists, operations on the end of the list
     (@snoc@, @last@, @init@, @unsnoc@), as well as @reverse@ and @length@,
     run in constant (amortized) time, while keeping an interface close to
     "Data.List".
-    .
+    
     The main module is "Data.SymmetricList", designed to be imported
     qualified:
-    .
+    
     > import Data.SymmetricList (SymmetricList)
     > import qualified Data.SymmetricList as SymmetricList
-    .
+    
     "Data.SymmetricList.Internal" exposes the underlying representation and
     makes no API stability guarantees.
 
@@ -71,7 +71,7 @@ benchmark symmetric-list-bench
     type:             exitcode-stdio-1.0
     hs-source-dirs:   bench
     main-is:          Bench.hs
-    ghc-options:      -O2 -rtsopts -with-rtsopts=-A32m
+    ghc-options:      -rtsopts -with-rtsopts=-A32m
     build-depends:
         base,
         symmetric-list,
