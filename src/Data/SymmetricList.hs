@@ -1,4 +1,6 @@
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
+{-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE ViewPatterns #-}
 
 {-|
 Module      : Data.SymmetricList
@@ -26,7 +28,6 @@ Appending is also available unqualified through the 'Semigroup' instance:
 -}
 
 module Data.SymmetricList (
-    SymmetricList,
     fromList,
     toList,
     nil,
@@ -45,11 +46,30 @@ module Data.SymmetricList (
     append,
     uncons,
     unsnoc,
+    SymmetricList (Empty, (:<|), (:|>))    
 ) where
 
 import Prelude hiding (head, tail, last, dropWhile, init, null, reverse, map, filter)
 import qualified Data.List as Lst
 import Data.SymmetricList.Internal
+
+infixr 5 :<|
+infixl 5 :|>
+
+pattern Empty :: SymmetricList a   
+pattern Empty <- (null -> True) 
+    where Empty = nil
+
+pattern (:<|) :: a -> SymmetricList a -> SymmetricList a
+pattern (:<|) x rest <- (uncons -> Just (x, rest))
+    where (:<|) x rest = cons x rest
+
+pattern (:|>) :: SymmetricList a -> a -> SymmetricList a
+pattern (:|>)  rest x <- (unsnoc -> Just (rest, x))
+    where (:|>) rest x = snoc x rest
+
+{-# COMPLETE Empty, (:<|) #-}
+{-# COMPLETE Empty, (:|>) #-}
 
 -- | \(\mathcal{O}(n)\). Returns the symmetric representation of the list
 --  
